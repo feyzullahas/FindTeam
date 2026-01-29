@@ -6,6 +6,7 @@ import AuthSuccess from './pages/AuthSuccess'
 import Profile from './pages/Profile'
 import CreatePost from './pages/CreatePost'
 import Posts from './pages/Posts'
+import Debug from './pages/Debug'
 import './App.css'
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           
           <Route path="/" element={<Home />} />
           <Route path="/auth-success" element={<AuthSuccess />} />
+          <Route path="/debug" element={<Debug />} />
           <Route 
             path="/profile" 
             element={user ? <Profile /> : <Navigate to="/" />} 

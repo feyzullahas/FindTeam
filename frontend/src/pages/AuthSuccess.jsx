@@ -12,13 +12,17 @@ function AuthSuccess() {
     try {
       const params = new URLSearchParams(window.location.search);
       const userParam = params.get("user");
+      const tokenParam = params.get("token");
 
-      console.log("URL params:", params.toString());
-      console.log("User param:", userParam);
+      console.log(" Full URL:", window.location.href);
+      console.log(" URL params:", params.toString());
+      console.log(" User param:", userParam);
+      console.log(" Token param:", tokenParam);
+      console.log(" Token length:", tokenParam ? tokenParam.length : 0);
 
       if (userParam) {
         const user = JSON.parse(decodeURIComponent(userParam));
-        console.log("Parsed user:", user);
+        console.log(" Parsed user:", user);
 
         // Kullanıcı bilgisini context'e kaydet
         const userData = {
@@ -31,8 +35,16 @@ function AuthSuccess() {
         
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
+        console.log(" User saved to context and localStorage");
         
-        console.log("User saved to context:", userData);
+        // JWT token'ı localStorage'a kaydet
+        if (tokenParam && tokenParam.length > 0) {
+          localStorage.setItem('access_token', tokenParam);
+          console.log(" JWT token saved to localStorage");
+          console.log(" Token length:", tokenParam.length);
+        } else {
+          console.warn(" No token found in URL params");
+        }
         
         // 2 saniye sonra ana sayfaya yönlendir
         setTimeout(() => {
@@ -40,13 +52,14 @@ function AuthSuccess() {
         }, 2000);
         
       } else {
+        console.error(" No user param found in URL");
         setError("Kullanıcı bilgisi bulunamadı");
         setTimeout(() => {
           navigate('/');
         }, 2000);
       }
     } catch (err) {
-      console.error("AuthSuccess error:", err);
+      console.error(" AuthSuccess error:", err);
       setError("Kullanıcı bilgisi işlenirken hata oluştu: " + err.message);
       setTimeout(() => {
         navigate('/');

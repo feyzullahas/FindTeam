@@ -2,11 +2,43 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8000';
 
+// Axios interceptor for better error handling
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error.response?.data || error.message);
+    
+    // Handle specific error cases
+    if (error.response?.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
+      window.location.href = '/';
+      return Promise.reject(new Error('Oturum süreniz doldu. Lütfen tekrar giriş yapın.'));
+    }
+    
+    if (error.response?.status === 400) {
+      const message = error.response.data?.detail || 'Geçersiz istek.';
+      return Promise.reject(new Error(message));
+    }
+    
+    if (error.response?.status === 500) {
+      return Promise.reject(new Error('Sunucu hatası. Lütfen daha sonra tekrar deneyin.'));
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
 export const usersAPI = {
   // Update user profile
   updateProfile: async (profileData) => {
     try {
       const token = localStorage.getItem('access_token');
+      if (!token) {
+        throw new Error('Oturum açmanız gerekiyor.');
+      }
+      
       const response = await axios.put(`${API_BASE_URL}/users/profile`, profileData, {
         headers: {
           'Authorization': `Bearer ${token}`,
