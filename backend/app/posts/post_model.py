@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, JSON
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.database.base import Base
@@ -12,11 +12,15 @@ class Post(Base):
     post_type = Column(String(20), nullable=False)  # "team" or "player"
     city = Column(String(100), nullable=False)
     positions_needed = Column(Text, nullable=True)  # JSON string of positions
-    contact_phone = Column(String(20), nullable=False)
+    contact_info = Column(JSON, nullable=False)  # {"phone": "...", "email": "..."}
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    is_active = Column(String(10), default="active")  # "active" or "passive"
+    status = Column(String(10), default="active")  # "active", "closed", "expired"
+    views_count = Column(Integer, default=0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
-    # Relationship
+    # Relationships
     user = relationship("User", backref="posts")
+    
+    def __repr__(self):
+        return f"<Post(id={self.id}, title={self.title}, user_id={self.user_id})>"

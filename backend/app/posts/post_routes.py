@@ -42,8 +42,14 @@ async def create_post(
 ):
     post_data = post.dict()
     
+    # Handle positions_needed
     if post_data.get("positions_needed"):
         post_data["positions_needed"] = json.dumps(post_data["positions_needed"])
+    
+    # Handle contact_info
+    if post_data.get("contact_info"):
+        # contact_info zaten JSON formatında, doğrudan kullan
+        pass
     
     db_post = Post(**post_data, user_id=current_user.id)
     db.add(db_post)
@@ -62,9 +68,10 @@ async def create_post(
         post_type=db_post.post_type,
         city=db_post.city,
         positions_needed=positions_needed,
-        contact_phone=db_post.contact_phone,
+        contact_info=db_post.contact_info,
         user_id=db_post.user_id,
-        is_active=db_post.is_active,
+        status=db_post.status,
+        views_count=db_post.views_count,
         created_at=db_post.created_at,
         user_name=user_name
     )
@@ -89,6 +96,9 @@ async def get_posts(
     if position:
         query = query.filter(Post.positions_needed.ilike(f"%{position}%"))
     
+    # Sadece aktif ilanları göster
+    query = query.filter(Post.status == "active")
+    
     total = query.count()
     posts = query.offset(skip).limit(limit).all()
     
@@ -102,9 +112,10 @@ async def get_posts(
             post_type=post.post_type,
             city=post.city,
             positions_needed=positions_needed,
-            contact_phone=post.contact_phone,
+            contact_info=post.contact_info,
             user_id=post.user_id,
-            is_active=post.is_active,
+            status=post.status,
+            views_count=post.views_count,
             created_at=post.created_at,
             user_name=post.user.name if post.user else None
         ))
@@ -128,9 +139,10 @@ async def get_my_posts(
             post_type=post.post_type,
             city=post.city,
             positions_needed=positions_needed,
-            contact_phone=post.contact_phone,
+            contact_info=post.contact_info,
             user_id=post.user_id,
-            is_active=post.is_active,
+            status=post.status,
+            views_count=post.views_count,
             created_at=post.created_at,
             user_name=current_user.name
         ))
@@ -169,9 +181,10 @@ async def update_post(
         post_type=db_post.post_type,
         city=db_post.city,
         positions_needed=positions_needed,
-        contact_phone=db_post.contact_phone,
+        contact_info=db_post.contact_info,
         user_id=db_post.user_id,
-        is_active=db_post.is_active,
+        status=db_post.status,
+        views_count=db_post.views_count,
         created_at=db_post.created_at,
         user_name=current_user.name
     )

@@ -30,10 +30,15 @@ const Profile = () => {
     
     try {
       const updatedUser = await usersAPI.updateProfile(data);
+      
+      // Context'in setUser fonksiyonunu kullan (otomatik localStorage'a yazar)
       setUser(updatedUser);
+      
       setMessage('Profil başarıyla güncellendi!');
+      console.log('Profile updated successfully:', updatedUser);
     } catch (error) {
-      setMessage('Profil güncellenirken hata oluştu. Lütfen tekrar deneyin.');
+      console.error('Profile update error:', error);
+      setMessage(error.message || 'Profil güncellenirken hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }

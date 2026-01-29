@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict
 from datetime import datetime
 
 class PostBase(BaseModel):
@@ -8,7 +8,7 @@ class PostBase(BaseModel):
     post_type: str  # "team" or "player"
     city: str
     positions_needed: Optional[List[str]] = None
-    contact_phone: str
+    contact_info: Dict[str, str]  # {"phone": "...", "email": "..."}
 
 class PostCreate(PostBase):
     pass
@@ -18,13 +18,14 @@ class PostUpdate(BaseModel):
     description: Optional[str] = None
     city: Optional[str] = None
     positions_needed: Optional[List[str]] = None
-    contact_phone: Optional[str] = None
-    is_active: Optional[str] = None
+    contact_info: Optional[Dict[str, str]] = None
+    status: Optional[str] = None
 
 class PostResponse(PostBase):
     id: int
     user_id: int
-    is_active: str
+    status: str
+    views_count: int
     created_at: datetime
     user_name: Optional[str] = None
     

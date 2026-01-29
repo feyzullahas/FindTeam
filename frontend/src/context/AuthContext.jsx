@@ -20,10 +20,12 @@ export const AuthProvider = ({ children }) => {
     if (savedUser) {
       try {
         const userData = JSON.parse(savedUser);
+        console.log('Loading user from localStorage:', userData);
         setUser(userData);
       } catch (error) {
         console.error('Kullanıcı bilgisi parse edilemedi:', error);
         localStorage.removeItem('user');
+        localStorage.removeItem('access_token');
       }
     }
     setLoading(false);
@@ -36,11 +38,19 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('access_token');
+  };
+
+  // Kullanıcı bilgisini güncelleme fonksiyonu
+  const updateUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+    console.log('User updated in context and localStorage:', userData);
   };
 
   const value = {
     user,
-    setUser, // 👈 BU MUTLAKA OLMALI!
+    setUser: updateUser, // updateUser fonksiyonunu kullan
     login,
     logout,
     loading

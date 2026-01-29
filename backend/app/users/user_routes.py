@@ -34,7 +34,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
 @router.get("/profile", response_model=UserProfile)
 async def get_user_profile(current_user: User = Depends(get_current_user)):
-    positions = json.loads(current_user.positions) if current_user.positions else []
     return UserProfile(
         id=current_user.id,
         email=current_user.email,
@@ -42,7 +41,7 @@ async def get_user_profile(current_user: User = Depends(get_current_user)):
         phone=current_user.phone,
         city=current_user.city,
         age=current_user.age,
-        positions=positions,
+        positions=[],  # Positions暂时返回空数组
         is_verified=current_user.is_verified,
         created_at=current_user.created_at
     )
@@ -55,8 +54,9 @@ async def update_user_profile(
 ):
     update_data = user_update.dict(exclude_unset=True)
     
-    if "positions" in update_data and update_data["positions"]:
-        update_data["positions"] = json.dumps(update_data["positions"])
+    # Positions alanını geçici olarak ignore et
+    if "positions" in update_data:
+        del update_data["positions"]
     
     for field, value in update_data.items():
         setattr(current_user, field, value)
@@ -64,7 +64,6 @@ async def update_user_profile(
     db.commit()
     db.refresh(current_user)
     
-    positions = json.loads(current_user.positions) if current_user.positions else []
     return UserProfile(
         id=current_user.id,
         email=current_user.email,
@@ -72,7 +71,7 @@ async def update_user_profile(
         phone=current_user.phone,
         city=current_user.city,
         age=current_user.age,
-        positions=positions,
+        positions=[],  # Positions暂时返回空数组
         is_verified=current_user.is_verified,
         created_at=current_user.created_at
     )

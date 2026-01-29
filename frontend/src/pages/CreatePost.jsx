@@ -18,16 +18,27 @@ const CreatePost = () => {
     setMessage('');
     
     try {
+      // Backend'in beklediği formata dönüştür
       const postData = {
-        ...data,
-        positions_needed: data.positions_needed || []
+        title: data.title,
+        description: data.description,
+        city: data.city,
+        post_type: data.post_type,
+        positions_needed: data.positions_needed || [],
+        contact_info: {
+          phone: data.contact_phone,
+          email: data.contact_email || ''
+        }
       };
+      
+      console.log('📤 Sending post data:', postData);
       
       await postsAPI.createPost(postData);
       setMessage('İlan başarıyla oluşturuldu!');
       setTimeout(() => navigate('/posts'), 2000);
     } catch (error) {
-      setMessage('İlan oluşturulurken hata oluştu. Lütfen tekrar deneyin.');
+      console.error('❌ Create post error:', error);
+      setMessage(error.message || 'İlan oluşturulurken hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }

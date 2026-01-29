@@ -171,7 +171,7 @@ const Posts = () => {
                 <div className="flex items-center gap-2">
                   <Phone size={16} className="text-green-600" />
                   <span className="font-medium text-green-600">
-                    {formatPhoneNumber(post.contact_phone)}
+                    {post.contact_info?.phone ? formatPhoneNumber(post.contact_info.phone) : 'Telefon belirtilmemiş'}
                   </span>
                 </div>
               </div>
