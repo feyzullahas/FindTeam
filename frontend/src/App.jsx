@@ -25,20 +25,20 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       {/* Sadece giriş yapmış kullanıcılar navbar görsün */}
       {user && <Navbar />}
-      
-      <main className={user ? "container mx-auto px-4 py-8" : ""}>
+
+      <main className={user ? "pt-20" : ""}>
         <Routes>
-          
+
           <Route path="/" element={user ? <Navigate to="/posts" /> : <Home />} />
           <Route path="/auth-success" element={<AuthSuccess />} />
           <Route path="/debug" element={<Debug />} />
-          <Route 
-            path="/profile" 
-            element={user ? <Profile /> : <Navigate to="/" />} 
+          <Route
+            path="/profile"
+            element={user ? <Profile /> : <Navigate to="/" />}
           />
-          <Route 
-            path="/create-post" 
-            element={user ? <CreatePost /> : <Navigate to="/" />} 
+          <Route
+            path="/create-post"
+            element={user ? <CreatePost /> : <Navigate to="/" />}
           />
           <Route path="/posts" element={user ? <Posts /> : <Navigate to="/" />} />
           <Route path="/my-posts" element={user ? <MyPosts /> : <Navigate to="/" />} />

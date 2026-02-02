@@ -37,20 +37,20 @@ const Posts = () => {
   };
 
   return (
-    <div>
+    <div className="pt-24 px-4">
       <h1 className="text-3xl font-bold mb-8">İlanlar</h1>
-      
+
       {/* Filters */}
       <div className="card mb-8">
         <div className="flex items-center gap-2 mb-4">
           <Filter size={20} />
           <h2 className="text-xl font-semibold">Filtreler</h2>
         </div>
-        
+
         <div className="grid md:grid-cols-4 gap-4">
           <div>
             <label className="form-label">Şehir</label>
-            <select 
+            <select
               className="form-input"
               value={filters.city}
               onChange={(e) => handleFilterChange('city', e.target.value)}
@@ -64,7 +64,7 @@ const Posts = () => {
 
           <div>
             <label className="form-label">İlan Türü</label>
-            <select 
+            <select
               className="form-input"
               value={filters.post_type}
               onChange={(e) => handleFilterChange('post_type', e.target.value)}
@@ -79,7 +79,7 @@ const Posts = () => {
           {filters.post_type === 'player' && (
             <div>
               <label className="form-label">Pozisyonunuz</label>
-              <select 
+              <select
                 className="form-input"
                 value={filters.position}
                 onChange={(e) => handleFilterChange('position', e.target.value)}
@@ -112,8 +112,8 @@ const Posts = () => {
         ) : posts.length === 0 ? (
           <div className="text-center py-8">
             <div className="text-xl text-gray-600">
-              {filters.city || filters.post_type || filters.position 
-                ? 'Kriterlere uygun ilan bulunamadı.' 
+              {filters.city || filters.post_type || filters.position
+                ? 'Kriterlere uygun ilan bulunamadı.'
                 : 'Henüz ilan bulunmuyor.'}
             </div>
           </div>
@@ -124,11 +124,10 @@ const Posts = () => {
                 <div>
                   <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
                   <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      post.post_type === 'team' 
-                        ? 'bg-blue-100 text-blue-700' 
-                        : 'bg-green-100 text-green-700'
-                    }`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${post.post_type === 'team'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'bg-green-100 text-green-700'
+                      }`}>
                       {post.post_type === 'team' ? 'Takım Arıyor' : 'Oyuncu Arıyor'}
                     </span>
                     <div className="flex items-center gap-1">
@@ -155,7 +154,7 @@ const Posts = () => {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {post.positions_needed.map((position, index) => (
-                      <span 
+                      <span
                         key={index}
                         className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-sm"
                       >

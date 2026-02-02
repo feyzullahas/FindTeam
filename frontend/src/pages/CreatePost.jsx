@@ -9,14 +9,14 @@ const CreatePost = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  
+
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const postType = watch('post_type');
 
   const onSubmit = async (data) => {
     setLoading(true);
     setMessage('');
-    
+
     try {
       // Backend'in beklediği formata dönüştür
       const postData = {
@@ -31,9 +31,9 @@ const CreatePost = () => {
           email: data.contact_email || ''
         }
       };
-      
+
       console.log('📤 Sending post data:', postData);
-      
+
       await postsAPI.createPost(postData);
       setMessage('İlan başarıyla oluşturuldu!');
       setTimeout(() => navigate('/posts'), 2000);
@@ -46,14 +46,13 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto pt-24 px-4">
       <h1 className="text-3xl font-bold mb-8">Yeni İlan Ver</h1>
-      
+
       <div className="card">
         {message && (
-          <div className={`p-3 rounded-md mb-4 ${
-            message.includes('başarıyla') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-          }`}>
+          <div className={`p-3 rounded-md mb-4 ${message.includes('başarıyla') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+            }`}>
             {message}
           </div>
         )}

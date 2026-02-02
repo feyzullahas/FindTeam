@@ -10,7 +10,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  
+
   const { register, handleSubmit, formState: { errors }, reset, watch } = useForm();
 
   useEffect(() => {
@@ -28,24 +28,24 @@ const Profile = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     setMessage('');
-    
+
     try {
       // Checkbox değerlerini doğru şekilde al - array olarak dönüştür
       const formData = {
         ...data,
         positions: Array.isArray(data.positions) ? data.positions : []
       };
-      
+
       console.log('Form data being sent:', formData);
-      
+
       const updatedUser = await usersAPI.updateProfile(formData);
-      
+
       // Context'in setUser fonksiyonunu kullan (otomatik localStorage'a yazar)
       setUser(updatedUser);
-      
+
       setMessage('Profil başarıyla güncellendi!');
       console.log('Profile updated successfully:', updatedUser);
-      
+
       // Başarılı güncelleme sonrası düzenleme modunu kapat
       setIsEditing(false);
     } catch (error) {
@@ -61,7 +61,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto pt-24 px-4">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Profilim</h1>
         <button
@@ -72,7 +72,7 @@ const Profile = () => {
           {isEditing ? 'İptal' : 'Profili Düzenle'}
         </button>
       </div>
-      
+
       <div className="card mb-8">
         <div className="flex items-center gap-4 mb-6">
           <div className="bg-blue-100 rounded-full p-3">
@@ -107,11 +107,10 @@ const Profile = () => {
       {isEditing && (
         <div className="card">
           <h2 className="text-xl font-semibold mb-6">Profil Bilgilerini Düzenle</h2>
-          
+
           {message && (
-            <div className={`p-3 rounded-md mb-4 ${
-              message.includes('başarıyla') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-            }`}>
+            <div className={`p-3 rounded-md mb-4 ${message.includes('başarıyla') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+              }`}>
               {message}
             </div>
           )}

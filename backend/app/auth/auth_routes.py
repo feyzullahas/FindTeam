@@ -71,9 +71,8 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
         
         user_json = urllib.parse.quote(json.dumps(user_data))
         
-        # JWT token'ı da query param olarak gönder
         return RedirectResponse(
-            url=f"http://localhost:3002/auth-success?user={user_json}&token={jwt_token}"
+            url=f"http://localhost:3000/auth-success?user={user_json}&token={jwt_token}"
         )
 
     except Exception as e:

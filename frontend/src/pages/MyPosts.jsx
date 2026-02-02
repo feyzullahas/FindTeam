@@ -35,7 +35,7 @@ const MyPosts = () => {
     try {
       setDeleteLoading(postId);
       await postsAPI.deletePost(postId);
-      
+
       // Silinen ilanı listeden kaldır
       setPosts(posts.filter(post => post.id !== postId));
       setError('');
@@ -57,7 +57,7 @@ const MyPosts = () => {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto pt-24 px-4">
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           <span className="ml-3 text-gray-600">İlanlarınız yükleniyor...</span>
@@ -67,7 +67,7 @@ const MyPosts = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto pt-24 px-4">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold">İlanlarım</h1>
         <div className="text-sm text-gray-600">
