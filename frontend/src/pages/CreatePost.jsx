@@ -101,7 +101,7 @@ const CreatePost = () => {
             {errors.city && <span className="text-red-500 text-sm">Bu alan zorunludur</span>}
           </div>
 
-          {postType === 'team' && (
+          {postType === 'player' && (
             <div>
               <label className="form-label">Aradığınız Pozisyonlar</label>
               <div className="grid grid-cols-2 gap-3">
@@ -119,6 +119,17 @@ const CreatePost = () => {
               </div>
             </div>
           )}
+
+          <div>
+            <label className="form-label">Maç Saati</label>
+            <input
+              type="text"
+              className="form-input"
+              {...register('match_time')}
+              placeholder="Örn: 18:00-20:00 veya 19:00"
+            />
+            <p className="text-sm text-gray-500 mt-1">Maçın hangi saatlerde oynanacağını belirtin</p>
+          </div>
 
           <div>
             <label className="form-label">İletişim Telefonu</label>

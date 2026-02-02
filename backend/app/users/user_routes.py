@@ -41,7 +41,7 @@ async def get_user_profile(current_user: User = Depends(get_current_user)):
         phone=current_user.phone,
         city=current_user.city,
         age=current_user.age,
-        positions=[],  # Positions暂时返回空数组
+        positions=current_user.positions or [],  # Veritabanından pozisyonları al
         is_verified=current_user.is_verified,
         created_at=current_user.created_at
     )
@@ -54,8 +54,9 @@ async def update_user_profile(
 ):
     update_data = user_update.dict(exclude_unset=True)
     
-    # Positions alanını geçici olarak ignore et
+    # Positions alanını veritabanına kaydet
     if "positions" in update_data:
+        current_user.positions = update_data["positions"]
         del update_data["positions"]
     
     for field, value in update_data.items():
@@ -71,7 +72,7 @@ async def update_user_profile(
         phone=current_user.phone,
         city=current_user.city,
         age=current_user.age,
-        positions=[],  # Positions暂时返回空数组
+        positions=current_user.positions or [],  # Güncellenmiş pozisyonları döndür
         is_verified=current_user.is_verified,
         created_at=current_user.created_at
     )

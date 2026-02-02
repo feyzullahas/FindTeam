@@ -31,6 +31,27 @@ axios.interceptors.response.use(
 );
 
 export const usersAPI = {
+  // Get user profile
+  getProfile: async () => {
+    try {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        throw new Error('Oturum açmanız gerekiyor.');
+      }
+      
+      const response = await axios.get(`${API_BASE_URL}/users/profile`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Get profile error:', error);
+      throw error;
+    }
+  },
+
   // Update user profile
   updateProfile: async (profileData) => {
     try {

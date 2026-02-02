@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, JSON
 from sqlalchemy.sql import func
 from app.database.base import Base
 
@@ -12,6 +12,7 @@ class User(Base):
     phone = Column(String(20), nullable=True)
     age = Column(Integer, nullable=True)
     city = Column(String(100), nullable=True)
+    positions = Column(JSON, nullable=True)  # Pozisyonlar için JSON alanı
     bio = Column(Text, nullable=True)
     profile_picture = Column(String(500), nullable=True)
     is_verified = Column(Boolean, default=False)

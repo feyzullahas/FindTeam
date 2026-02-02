@@ -3,6 +3,8 @@ export const POSITIONS = [
   'Kaleci',
   'Defans',
   'Orta Saha',
+  'Sol Kanat',
+  'Sağ Kanat',
   'Forvet'
 ];
 

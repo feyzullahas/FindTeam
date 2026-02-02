@@ -76,19 +76,21 @@ const Posts = () => {
             </select>
           </div>
 
-          <div>
-            <label className="form-label">Pozisyon</label>
-            <select 
-              className="form-input"
-              value={filters.position}
-              onChange={(e) => handleFilterChange('position', e.target.value)}
-            >
-              <option value="">Tüm Pozisyonlar</option>
-              {POSITIONS.map(position => (
-                <option key={position} value={position}>{position}</option>
-              ))}
-            </select>
-          </div>
+          {filters.post_type === 'player' && (
+            <div>
+              <label className="form-label">Pozisyonunuz</label>
+              <select 
+                className="form-input"
+                value={filters.position}
+                onChange={(e) => handleFilterChange('position', e.target.value)}
+              >
+                <option value="">Tüm Pozisyonlar</option>
+                {POSITIONS.map(position => (
+                  <option key={position} value={position}>{position}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div className="flex items-end">
             <button
@@ -160,6 +162,18 @@ const Posts = () => {
                         {position}
                       </span>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {post.match_time && (
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Calendar size={16} />
+                    <span className="font-medium">Maç Saati:</span>
+                  </div>
+                  <div className="px-3 py-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium">
+                    🕐 {post.match_time}
                   </div>
                 </div>
               )}
