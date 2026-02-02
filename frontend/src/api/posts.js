@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.DEV ? '/api' : 'http://localhost:8000';
 
 // Axios interceptor for better error handling
 axios.interceptors.response.use(

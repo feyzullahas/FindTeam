@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
+import MyPosts from './pages/MyPosts'
 import AuthSuccess from './pages/AuthSuccess'
 import Profile from './pages/Profile'
 import CreatePost from './pages/CreatePost'
@@ -28,7 +29,7 @@ function App() {
       <main className={user ? "container mx-auto px-4 py-8" : ""}>
         <Routes>
           
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={user ? <Navigate to="/posts" /> : <Home />} />
           <Route path="/auth-success" element={<AuthSuccess />} />
           <Route path="/debug" element={<Debug />} />
           <Route 
@@ -40,6 +41,7 @@ function App() {
             element={user ? <CreatePost /> : <Navigate to="/" />} 
           />
           <Route path="/posts" element={user ? <Posts /> : <Navigate to="/" />} />
+          <Route path="/my-posts" element={user ? <MyPosts /> : <Navigate to="/" />} />
         </Routes>
       </main>
     </div>

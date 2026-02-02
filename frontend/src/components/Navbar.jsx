@@ -16,19 +16,19 @@ const Navbar = () => {
     <nav className="bg-white shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
-          <Link to="/" className="text-2xl font-bold text-blue-600">
+          <Link to="/posts" className="text-2xl font-bold text-blue-600">
             FindTeam
           </Link>
           
           <div className="hidden md:flex items-center space-x-6">
-            <Link to="/" className="nav-link">
-              Ana Sayfa
-            </Link>
             <Link to="/posts" className="nav-link">
               İlanlar
             </Link>
             {user && (
               <>
+                <Link to="/my-posts" className="nav-link">
+                  İlanlarım
+                </Link>
                 <Link to="/create-post" className="nav-link flex items-center gap-1">
                   <PlusCircle size={18} />
                   İlan Ver

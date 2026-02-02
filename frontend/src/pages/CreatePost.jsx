@@ -25,6 +25,7 @@ const CreatePost = () => {
         city: data.city,
         post_type: data.post_type,
         positions_needed: data.positions_needed || [],
+        match_time: data.match_time || null,
         contact_info: {
           phone: data.contact_phone,
           email: data.contact_email || ''

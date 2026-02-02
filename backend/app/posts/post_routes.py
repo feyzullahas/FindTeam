@@ -43,8 +43,10 @@ async def create_post(
     post_data = post.dict()
     
     # Handle positions_needed
-    if post_data.get("positions_needed"):
+    if post_data.get("positions_needed") and len(post_data["positions_needed"]) > 0:
         post_data["positions_needed"] = json.dumps(post_data["positions_needed"])
+    else:
+        post_data["positions_needed"] = None
     
     # Handle contact_info
     if post_data.get("contact_info"):
@@ -163,8 +165,11 @@ async def update_post(
     
     update_data = post_update.dict(exclude_unset=True)
     
-    if "positions_needed" in update_data and update_data["positions_needed"]:
-        update_data["positions_needed"] = json.dumps(update_data["positions_needed"])
+    if "positions_needed" in update_data:
+        if update_data["positions_needed"] and len(update_data["positions_needed"]) > 0:
+            update_data["positions_needed"] = json.dumps(update_data["positions_needed"])
+        else:
+            update_data["positions_needed"] = None
     
     for field, value in update_data.items():
         setattr(db_post, field, value)
