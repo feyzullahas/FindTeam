@@ -99,12 +99,12 @@ const MyPosts = () => {
             <div key={post.id} className="card hover:shadow-lg transition-shadow">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  {/* Header */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getPostTypeColor(post.post_type)}`}>
+                  {/* Header with title and badge */}
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-xl font-bold text-slate-900">{post.title}</h3>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${getPostTypeColor(post.post_type)}`}>
                       {getPostTypeLabel(post.post_type)}
                     </span>
-                    <h3 className="text-xl font-semibold text-gray-900">{post.title}</h3>
                   </div>
 
                   {/* Description */}
@@ -113,38 +113,48 @@ const MyPosts = () => {
                   )}
 
                   {/* Details Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <MapPin size={16} />
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-4 text-sm">
+                    <div className="flex items-center gap-1.5 text-slate-600">
+                      <MapPin size={16} className="text-slate-400" />
                       <span>{post.city}</span>
                     </div>
 
+                    <div className="flex items-center gap-1.5 text-slate-600">
+                      <Calendar size={16} className="text-slate-400" />
+                      <span>{formatDate(post.created_at)}</span>
+                    </div>
+
                     {post.match_time && (
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <Clock size={16} />
+                      <div className="flex items-center gap-1.5 text-slate-600">
+                        <Clock size={16} className="text-slate-400" />
                         <span>{post.match_time}</span>
                       </div>
                     )}
 
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Eye size={16} />
+                    <div className="flex items-center gap-1.5 text-slate-600">
+                      <Eye size={16} className="text-slate-400" />
                       <span>{post.views_count || 0} görüntülenme</span>
                     </div>
 
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Calendar size={16} />
-                      <span>{formatDate(post.created_at)}</span>
-                    </div>
+                    {post.contact_info?.phone ? (
+                      <a
+                        href={`tel:${post.contact_info.phone}`}
+                        className="flex items-center gap-1.5 text-green-600 hover:text-green-700 hover:underline transition-colors font-medium"
+                        title="Aramak için tıklayın"
+                      >
+                        <Phone size={16} />
+                        <span>{formatPhoneNumber(post.contact_info.phone)}</span>
+                      </a>
+                    ) : (
+                      <div className="flex items-center gap-1.5 text-gray-400">
+                        <Phone size={16} />
+                        <span>Telefon belirtilmemiş</span>
+                      </div>
+                    )}
 
-                    <div className="flex items-center gap-2 text-green-600">
-                      <Phone size={16} />
-                      <span className="font-medium">
-                        {post.contact_info?.phone ? formatPhoneNumber(post.contact_info.phone) : 'Telefon belirtilmemiş'}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-blue-600">
-                      <span className="px-2 py-1 bg-blue-100 rounded text-xs font-medium">
+                    <div className="flex items-center gap-1.5">
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${post.status === 'active' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
+                        }`}>
                         {post.status === 'active' ? 'Aktif' : post.status}
                       </span>
                     </div>

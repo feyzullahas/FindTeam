@@ -120,25 +120,26 @@ const Posts = () => {
         ) : (
           posts.map(post => (
             <div key={post.id} className="card">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${post.post_type === 'team'
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'bg-green-100 text-green-700'
-                      }`}>
-                      {post.post_type === 'team' ? 'Takım Arıyor' : 'Oyuncu Arıyor'}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      <MapPin size={14} />
-                      {post.city}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar size={14} />
-                      {formatDate(post.created_at)}
-                    </div>
-                  </div>
+              {/* Header with title and badge */}
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="text-xl font-bold text-slate-900">{post.title}</h3>
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${post.post_type === 'team'
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'bg-green-100 text-green-700'
+                  }`}>
+                  {post.post_type === 'team' ? 'Takım Arıyor' : 'Oyuncu Arıyor'}
+                </span>
+              </div>
+
+              {/* Metadata row */}
+              <div className="flex items-center gap-4 text-sm text-slate-600 mb-4">
+                <div className="flex items-center gap-1.5">
+                  <MapPin size={16} className="text-slate-400" />
+                  <span>{post.city}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Calendar size={16} className="text-slate-400" />
+                  <span>{formatDate(post.created_at)}</span>
                 </div>
               </div>
 
@@ -181,12 +182,21 @@ const Posts = () => {
                 <div className="text-sm text-gray-600">
                   {post.user_name && `İlan veren: ${post.user_name}`}
                 </div>
-                <div className="flex items-center gap-2">
-                  <Phone size={16} className="text-green-600" />
-                  <span className="font-medium text-green-600">
-                    {post.contact_info?.phone ? formatPhoneNumber(post.contact_info.phone) : 'Telefon belirtilmemiş'}
-                  </span>
-                </div>
+                {post.contact_info?.phone ? (
+                  <a
+                    href={`tel:${post.contact_info.phone}`}
+                    className="flex items-center gap-2 font-medium text-green-600 hover:text-green-700 hover:underline transition-colors"
+                    title="Aramak için tıklayın"
+                  >
+                    <Phone size={16} />
+                    <span>{formatPhoneNumber(post.contact_info.phone)}</span>
+                  </a>
+                ) : (
+                  <div className="flex items-center gap-2 text-gray-400">
+                    <Phone size={16} />
+                    <span>Telefon belirtilmemiş</span>
+                  </div>
+                )}
               </div>
             </div>
           ))
