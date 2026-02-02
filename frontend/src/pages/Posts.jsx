@@ -37,7 +37,7 @@ const Posts = () => {
   };
 
   return (
-    <div className="pt-24 px-4">
+    <div className="pt-24 px-4 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-8">İlanlar</h1>
 
       {/* Filters */}

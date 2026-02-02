@@ -48,20 +48,23 @@ function AuthSuccess() {
             is_verified: fullUserData.is_verified,
             created_at: fullUserData.created_at
           };
-          
+
           setUser(userData);
           localStorage.setItem('user', JSON.stringify(userData));
-          console.log(" Complete user data saved to context and localStorage");
-          
+          console.log("✅ Complete user data saved to context and localStorage");
+
+          // Direkt ilanlar sayfasına yönlendir
+          navigate('/posts');
+
         } else {
-          console.error(" No user or token found in URL params");
+          console.error("❌ No user or token found in URL params");
           setError("Kullanıcı bilgisi bulunamadı");
           setTimeout(() => {
             navigate('/');
           }, 3000);
         }
       } catch (err) {
-        console.error(" AuthSuccess error:", err);
+        console.error("❌ AuthSuccess error:", err);
         setError("Kullanıcı bilgisi işlenirken hata oluştu: " + err.message);
         setTimeout(() => {
           navigate('/');
