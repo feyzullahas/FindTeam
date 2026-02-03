@@ -103,6 +103,9 @@ async def get_posts(
     # Sadece aktif ilanları göster
     query = query.filter(Post.status == "active")
     
+    # En yeniden eskiye sırala
+    query = query.order_by(Post.created_at.desc())
+    
     total = query.count()
     posts = query.offset(skip).limit(limit).all()
     

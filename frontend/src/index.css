@@ -87,8 +87,11 @@ code {
 }
 
 /* Smooth Scrolling */
+/* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
+  font-size: 80%;
+  /* Scale everything down by 20% */
 }
 
 /* Focus Visible for Accessibility */

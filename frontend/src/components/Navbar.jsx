@@ -64,46 +64,57 @@ const Navbar = () => {
                 className="w-full h-full object-cover"
               />
             </motion.div>
-            <span className="text-xl font-bold text-slate-900 drop-shadow-md">
+            <span className="text-2xl font-bold text-slate-900 drop-shadow-md">
               FindTeam
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`nav-link ${isActive(link.path) ? 'active' : ''}`}
-                >
-                  <Icon size={18} />
-                  {link.label}
-                </Link>
-              );
-            })}
+          <div className="flex items-center gap-2">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-2">
+              {/* Club Logo (Desktop) */}
+              <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm mr-2" title="Yazılım Geliştirme Kulübü">
+                <img src="/software-club-logo.png" alt="Yazılım Geliştirme Kulübü" className="w-full h-full object-cover" />
+              </div>
+              {navLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`nav-link ${isActive(link.path) ? 'active' : ''}`}
+                  >
+                    <Icon size={18} />
+                    {link.label}
+                  </Link>
+                );
+              })}
 
+              <button
+                onClick={handleLogout}
+                className="nav-link text-red-600 hover:bg-red-50 ml-2"
+                aria-label="Çıkış Yap"
+              >
+                <LogOut size={18} />
+                Çıkış
+              </button>
+            </div>
+
+            {/* Club Logo (Mobile) */}
+            <div className="md:hidden w-14 h-14 rounded-full overflow-hidden flex items-center justify-center border border-white shadow-sm" title="Yazılım Geliştirme Kulübü">
+              <img src="/software-club-logo.png" alt="Yazılım Geliştirme Kulübü" className="w-full h-full object-cover" />
+            </div>
+
+            {/* Mobile Menu Button */}
             <button
-              onClick={handleLogout}
-              className="nav-link text-red-600 hover:bg-red-50 ml-2"
-              aria-label="Çıkış Yap"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+              aria-label="Menüyü Aç/Kapat"
+              aria-expanded={isMobileMenuOpen}
             >
-              <LogOut size={18} />
-              Çıkış
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
-            aria-label="Menüyü Aç/Kapat"
-            aria-expanded={isMobileMenuOpen}
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
 
         {/* Mobile Menu */}

@@ -85,7 +85,7 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              Türkiye'nin en büyük halı saha topluluğuna katıl!
+              Maç Başlasın: Aradığın Oyuncu Bir Tık Uzakta.
             </motion.p>
           </div>
 
@@ -94,8 +94,8 @@ const Home = () => {
             <button
               onClick={() => { setActiveTab('login'); setError(''); }}
               className={`flex-1 py-3 rounded-lg font-semibold transition-all ${activeTab === 'login'
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'bg-white text-slate-600 hover:bg-slate-50'
+                ? 'bg-emerald-600 text-white shadow-md'
+                : 'bg-white text-slate-600 hover:bg-slate-50'
                 }`}
             >
               Giriş Yap
@@ -103,8 +103,8 @@ const Home = () => {
             <button
               onClick={() => { setActiveTab('register'); setError(''); }}
               className={`flex-1 py-3 rounded-lg font-semibold transition-all ${activeTab === 'register'
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'bg-white text-slate-600 hover:bg-slate-50'
+                ? 'bg-emerald-600 text-white shadow-md'
+                : 'bg-white text-slate-600 hover:bg-slate-50'
                 }`}
             >
               Kayıt Ol
