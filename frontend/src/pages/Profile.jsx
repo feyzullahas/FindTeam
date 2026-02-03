@@ -61,9 +61,9 @@ const Profile = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto pt-24 px-4">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Profilim</h1>
+    <div className="max-w-2xl mx-auto pt-8 px-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-white drop-shadow-lg">Profilim</h1>
         <button
           onClick={() => setIsEditing(!isEditing)}
           className="btn btn-secondary flex items-center gap-2"

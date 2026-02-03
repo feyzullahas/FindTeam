@@ -57,20 +57,20 @@ const MyPosts = () => {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto pt-24 px-4">
+      <div className="max-w-4xl mx-auto pt-8 px-4">
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-gray-600">İlanlarınız yükleniyor...</span>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+          <span className="ml-3 text-white drop-shadow">İlanlarınız yükleniyor...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto pt-24 px-4">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">İlanlarım</h1>
-        <div className="text-sm text-gray-600">
+    <div className="max-w-4xl mx-auto pt-8 px-4">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-white drop-shadow-lg">İlanlarım</h1>
+        <div className="text-sm text-white/80 drop-shadow">
           Toplam {posts.length} ilanınız bulunuyor
         </div>
       </div>

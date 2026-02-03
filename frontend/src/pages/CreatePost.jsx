@@ -46,8 +46,8 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto pt-24 px-4">
-      <h1 className="text-3xl font-bold mb-8">Yeni İlan Ver</h1>
+    <div className="max-w-2xl mx-auto pt-8 px-4">
+      <h1 className="text-3xl font-bold mb-6 text-white drop-shadow-lg">Yeni İlan Ver</h1>
 
       <div className="card">
         {message && (

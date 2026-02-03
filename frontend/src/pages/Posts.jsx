@@ -37,8 +37,8 @@ const Posts = () => {
   };
 
   return (
-    <div className="pt-24 px-4 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">İlanlar</h1>
+    <div className="pt-8 px-4 max-w-6xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-white drop-shadow-lg">İlanlar</h1>
 
       {/* Filters */}
       <div className="card mb-8">
