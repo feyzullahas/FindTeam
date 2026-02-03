@@ -28,7 +28,7 @@ const ModernHome = () => {
           </p>
 
           <button
-            onClick={() => window.location.href = 'http://localhost:8000/auth/google/login'}
+            onClick={() => window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/auth/google/login`}
             className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl flex items-center justify-center gap-3"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24">
