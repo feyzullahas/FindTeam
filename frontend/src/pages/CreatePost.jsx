@@ -26,6 +26,7 @@ const CreatePost = () => {
         post_type: data.post_type,
         positions_needed: data.positions_needed || [],
         match_time: data.match_time || null,
+        venue: data.venue || null,
         contact_info: {
           phone: data.contact_phone,
           email: data.contact_email || ''
@@ -129,6 +130,17 @@ const CreatePost = () => {
               placeholder="Örn: 18:00-20:00 veya 19:00"
             />
             <p className="text-sm text-gray-500 mt-1">Maçın hangi saatlerde oynanacağını belirtin</p>
+          </div>
+
+          <div>
+            <label className="form-label">Saha</label>
+            <input
+              type="text"
+              className="form-input"
+              {...register('venue')}
+              placeholder="Örn: Atatürk Spor Kompleksi, Merkez Halı Saha"
+            />
+            <p className="text-sm text-gray-500 mt-1">Maçın oynanacağı saha/yer</p>
           </div>
 
           <div>

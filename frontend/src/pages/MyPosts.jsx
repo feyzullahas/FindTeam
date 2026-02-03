@@ -124,13 +124,6 @@ const MyPosts = () => {
                       <span>{formatDate(post.created_at)}</span>
                     </div>
 
-                    {post.match_time && (
-                      <div className="flex items-center gap-1.5 text-slate-600">
-                        <Clock size={16} className="text-slate-400" />
-                        <span>{post.match_time}</span>
-                      </div>
-                    )}
-
                     {post.contact_info?.phone ? (
                       <a
                         href={`tel:${post.contact_info.phone}`}
@@ -154,6 +147,22 @@ const MyPosts = () => {
                       </span>
                     </div>
                   </div>
+
+                  {/* Match time and venue */}
+                  {(post.match_time || post.venue) && (
+                    <div className="flex items-center gap-3 mb-4 flex-wrap">
+                      {post.match_time && (
+                        <div className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-md font-medium text-sm">
+                          🕐 {post.match_time}
+                        </div>
+                      )}
+                      {post.venue && (
+                        <div className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-md font-medium text-sm">
+                          📍 {post.venue}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* Positions */}
                   {post.positions_needed && post.positions_needed.length > 0 && (

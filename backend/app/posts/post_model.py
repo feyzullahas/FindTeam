@@ -14,6 +14,7 @@ class Post(Base):
     positions_needed = Column(Text, nullable=True)  # JSON string of positions
     contact_info = Column(JSON, nullable=False)  # {"phone": "...", "email": "..."}
     match_time = Column(String(50), nullable=True)  # "18:00-20:00" formatında saat aralığı
+    venue = Column(String(255), nullable=True)  # Saha adı/yeri
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     status = Column(String(10), default="active")  # "active", "closed", "expired"
     views_count = Column(Integer, default=0)

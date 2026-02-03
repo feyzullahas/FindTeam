@@ -143,6 +143,22 @@ const Posts = () => {
                 </div>
               </div>
 
+              {/* Match time and venue */}
+              {(post.match_time || post.venue) && (
+                <div className="flex items-center gap-4 text-sm mb-3 flex-wrap">
+                  {post.match_time && (
+                    <div className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-md font-medium">
+                      🕐 {post.match_time}
+                    </div>
+                  )}
+                  {post.venue && (
+                    <div className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-md font-medium">
+                      📍 {post.venue}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {post.description && (
                 <p className="text-gray-700 mb-4">{post.description}</p>
               )}
@@ -162,18 +178,6 @@ const Posts = () => {
                         {position}
                       </span>
                     ))}
-                  </div>
-                </div>
-              )}
-
-              {post.match_time && (
-                <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Calendar size={16} />
-                    <span className="font-medium">Maç Saati:</span>
-                  </div>
-                  <div className="px-3 py-2 bg-emerald-50 text-emerald-700 rounded-md text-sm font-medium">
-                    🕐 {post.match_time}
                   </div>
                 </div>
               )}

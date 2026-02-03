@@ -10,6 +10,7 @@ class PostBase(BaseModel):
     positions_needed: Optional[List[str]] = None
     contact_info: Dict[str, str]  # {"phone": "...", "email": "..."}
     match_time: Optional[str] = None  # "18:00-20:00" formatında saat aralığı
+    venue: Optional[str] = None  # Saha adı/yeri
 
 class PostCreate(PostBase):
     pass
@@ -21,6 +22,7 @@ class PostUpdate(BaseModel):
     positions_needed: Optional[List[str]] = None
     contact_info: Optional[Dict[str, str]] = None
     match_time: Optional[str] = None
+    venue: Optional[str] = None
     status: Optional[str] = None
 
 class PostResponse(PostBase):
