@@ -15,6 +15,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Trust proxy headers (Critical for Render/Heroku HTTPS)
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=["*"])
+
 # Include routers
 app.include_router(auth_router, tags=["auth"])
 app.include_router(user_router, prefix="/users", tags=["users"])
