@@ -64,7 +64,7 @@ const Navbar = () => {
                 className="w-full h-full object-cover"
               />
             </motion.div>
-            <span className="text-xl font-bold text-slate-900 drop-shadow-md hidden sm:block">
+            <span className="text-xl font-bold text-slate-900 drop-shadow-md">
               FindTeam
             </span>
           </Link>

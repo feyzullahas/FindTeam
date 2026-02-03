@@ -131,11 +131,6 @@ const MyPosts = () => {
                       </div>
                     )}
 
-                    <div className="flex items-center gap-1.5 text-slate-600">
-                      <Eye size={16} className="text-slate-400" />
-                      <span>{post.views_count || 0} görüntülenme</span>
-                    </div>
-
                     {post.contact_info?.phone ? (
                       <a
                         href={`tel:${post.contact_info.phone}`}

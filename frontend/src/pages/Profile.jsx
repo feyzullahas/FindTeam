@@ -66,10 +66,10 @@ const Profile = () => {
         <h1 className="text-3xl font-bold text-white drop-shadow-lg">Profilim</h1>
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="btn btn-secondary flex items-center gap-2"
+          className="btn btn-secondary flex items-center gap-1 text-sm px-2 py-1.5 w-auto"
         >
-          {isEditing ? <X size={16} /> : <Edit2 size={16} />}
-          {isEditing ? 'İptal' : 'Profili Düzenle'}
+          {isEditing ? <X size={14} /> : <Edit2 size={14} />}
+          {isEditing ? 'İptal' : 'Düzenle'}
         </button>
       </div>
 

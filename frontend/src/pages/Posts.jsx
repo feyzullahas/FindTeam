@@ -124,8 +124,8 @@ const Posts = () => {
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-xl font-bold text-slate-900">{post.title}</h3>
                 <span className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${post.post_type === 'team'
-                  ? 'bg-emerald-100 text-emerald-700'
-                  : 'bg-green-100 text-green-700'
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'bg-orange-100 text-orange-700'
                   }`}>
                   {post.post_type === 'team' ? 'Takım Arıyor' : 'Oyuncu Arıyor'}
                 </span>
