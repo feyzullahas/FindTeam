@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "https://findteam-ten.vercel.app"
     
     # Environment
-    #  ENVIRONMENT: str = "development"
+    ENVIRONMENT: str = "development"
     DEBUG: bool = True
     
     class Config:
