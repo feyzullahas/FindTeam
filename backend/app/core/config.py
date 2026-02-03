@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     # Google OAuth
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
-    GOOGLE_REDIRECT_URI: str = "http://localhost:8000/auth/google/callback"
+    GOOGLE_REDIRECT_URI: str = "https://findteam.onrender.com/auth/google/callback"
     
     # JWT
     SECRET_KEY: str
@@ -17,10 +17,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     # Frontend URL
-    FRONTEND_URL: str = "http://localhost:3002"
+    FRONTEND_URL: str = "https://findteam-ten.vercel.app"
     
     # Environment
-    ENVIRONMENT: str = "development"
+    #  ENVIRONMENT: str = "development"
     DEBUG: bool = True
     
     class Config:
