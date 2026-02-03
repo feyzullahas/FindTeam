@@ -9,6 +9,7 @@ class User(Base):
     email = Column(String(255), unique=True, index=True, nullable=False)
     name = Column(String(255), nullable=False)
     google_id = Column(String(255), unique=True, nullable=True)
+    hashed_password = Column(String(255), nullable=True)  # For email/password auth
     phone = Column(String(20), nullable=True)
     age = Column(Integer, nullable=True)
     city = Column(String(100), nullable=True)

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.DEV ? '/api' : 'http://localhost:8000';
+const API_BASE_URL = 'http://localhost:8000';
 
 export const authAPI = {
   // Google OAuth login
@@ -43,16 +43,52 @@ export const authAPI = {
       const response = await axios.get(`${API_BASE_URL}/auth/google/callback`, {
         params: { code }
       });
-      
+
       // Token'ı localStorage'a kaydet
       if (response.data.access_token) {
         localStorage.setItem('access_token', response.data.access_token);
       }
-      
+
       return response.data;
     } catch (error) {
       console.error('OAuth callback error:', error);
       throw error;
+    }
+  },
+
+  // Register with email/password
+  register: async (userData) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);
+
+      // Store token and user in localStorage
+      if (response.data.access_token) {
+        localStorage.setItem('access_token', response.data.access_token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw new Error(error.response?.data?.detail || 'Kayıt başarısız oldu');
+    }
+  },
+
+  // Login with email/password
+  login: async (credentials) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, credentials);
+
+      // Store token and user in localStorage
+      if (response.data.access_token) {
+        localStorage.setItem('access_token', response.data.access_token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw new Error(error.response?.data?.detail || 'Giriş başarısız oldu');
     }
   }
 };

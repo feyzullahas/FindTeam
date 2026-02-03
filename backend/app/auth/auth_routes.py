@@ -81,3 +81,110 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
             status_code=500,
             detail=f"Authentication hatası: {str(e)}"
         )
+
+@router.post("/register")
+async def register(user_data: dict, db: Session = Depends(get_db)):
+    """Email/password ile kullanıcı kaydı"""
+    try:
+        # Validate required fields
+        email = user_data.get("email")
+        password = user_data.get("password")
+        password_confirm = user_data.get("password_confirm")
+        name = user_data.get("name")
+        
+        if not all([email, password, password_confirm, name]):
+            raise HTTPException(status_code=400, detail="Tüm alanlar zorunludur")
+        
+        # Check password match
+        if password != password_confirm:
+            raise HTTPException(status_code=400, detail="Şifreler eşleşmiyor")
+        
+        # Check password length
+        if len(password) < 6:
+            raise HTTPException(status_code=400, detail="Şifre en az 6 karakter olmalıdır")
+        
+        # Check if user already exists
+        existing_user = db.query(User).filter(User.email == email).first()
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Bu email adresi zaten kayıtlı")
+        
+        # Hash password
+        from app.core.security import get_password_hash
+        hashed_password = get_password_hash(password)
+        
+        # Create user
+        new_user = User(
+            email=email,
+            name=name,
+            hashed_password=hashed_password,
+            is_verified=False
+        )
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        
+        # Create JWT token
+        jwt_token = create_access_token(data={"sub": new_user.email, "user_id": new_user.id})
+        
+        return {
+            "access_token": jwt_token,
+            "token_type": "bearer",
+            "user": {
+                "id": new_user.id,
+                "email": new_user.email,
+                "name": new_user.name,
+                "is_verified": new_user.is_verified
+            }
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"❌ Registration error: {e}")
+        raise HTTPException(status_code=500, detail=f"Kayıt hatası: {str(e)}")
+
+@router.post("/login")
+async def login(credentials: dict, db: Session = Depends(get_db)):
+    """Email/password ile giriş"""
+    try:
+        email = credentials.get("email")
+        password = credentials.get("password")
+        
+        if not email or not password:
+            raise HTTPException(status_code=400, detail="Email ve şifre gereklidir")
+        
+        # Find user
+        user = db.query(User).filter(User.email == email).first()
+        if not user:
+            raise HTTPException(status_code=401, detail="Email veya şifre hatalı")
+        
+        # Check if user has password (not Google OAuth only)
+        if not user.hashed_password:
+            raise HTTPException(status_code=401, detail="Bu hesap Google ile oluşturulmuş. Lütfen Google ile giriş yapın.")
+        
+        # Verify password
+        from app.core.security import verify_password
+        if not verify_password(password, user.hashed_password):
+            raise HTTPException(status_code=401, detail="Email veya şifre hatalı")
+        
+        # Create JWT token
+        jwt_token = create_access_token(data={"sub": user.email, "user_id": user.id})
+        
+        return {
+            "access_token": jwt_token,
+            "token_type": "bearer",
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "name": user.name,
+                "phone": user.phone,
+                "city": user.city,
+                "age": user.age,
+                "positions": user.positions,
+                "is_verified": user.is_verified
+            }
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"❌ Login error: {e}")
+        raise HTTPException(status_code=500, detail=f"Giriş hatası: {str(e)}")

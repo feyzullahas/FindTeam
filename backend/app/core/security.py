@@ -1,16 +1,35 @@
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import hashlib
+import os
 from app.core.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    """Verify a password against a hash"""
+    # Split the stored hash into salt and hash
+    parts = hashed_password.split('$')
+    if len(parts) != 2:
+        return False
+    
+    salt = bytes.fromhex(parts[0])
+    stored_hash = parts[1]
+    
+    # Hash the provided password with the same salt
+    new_hash = hashlib.pbkdf2_hmac('sha256', plain_password.encode('utf-8'), salt, 100000)
+    
+    return new_hash.hex() == stored_hash
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    """Hash a password using PBKDF2"""
+    # Generate a random salt
+    salt = os.urandom(32)
+    
+    # Hash the password
+    pwd_hash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+    
+    # Return salt and hash separated by $
+    return f"{salt.hex()}${pwd_hash.hex()}"
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
