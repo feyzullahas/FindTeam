@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.DEV ? '/api' : 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://findteam.onrender.com";
 
 // Axios interceptor for better error handling
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error('API Error:', error.response?.data || error.message);
-    
+
     // Handle specific error cases
     if (error.response?.status === 401) {
       // Token expired or invalid
@@ -16,16 +16,16 @@ axios.interceptors.response.use(
       window.location.href = '/';
       return Promise.reject(new Error('Oturum süreniz doldu. Lütfen tekrar giriş yapın.'));
     }
-    
+
     if (error.response?.status === 400) {
       const message = error.response.data?.detail || 'Geçersiz istek.';
       return Promise.reject(new Error(message));
     }
-    
+
     if (error.response?.status === 500) {
       return Promise.reject(new Error('Sunucu hatası. Lütfen daha sonra tekrar deneyin.'));
     }
-    
+
     return Promise.reject(error);
   }
 );
@@ -56,7 +56,7 @@ export const postsAPI = {
       if (!token) {
         throw new Error('Oturum açmanız gerekiyor.');
       }
-      
+
       const response = await axios.post(`${API_BASE_URL}/posts/`, postData, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -77,7 +77,7 @@ export const postsAPI = {
       if (!token) {
         throw new Error('Oturum açmanız gerekiyor.');
       }
-      
+
       const response = await axios.get(`${API_BASE_URL}/posts/my`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -97,7 +97,7 @@ export const postsAPI = {
       if (!token) {
         throw new Error('Oturum açmanız gerekiyor.');
       }
-      
+
       const response = await axios.put(`${API_BASE_URL}/posts/${postId}`, postData, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -118,7 +118,7 @@ export const postsAPI = {
       if (!token) {
         throw new Error('Oturum açmanız gerekiyor.');
       }
-      
+
       const response = await axios.delete(`${API_BASE_URL}/posts/${postId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
