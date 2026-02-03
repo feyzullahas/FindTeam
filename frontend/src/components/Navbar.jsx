@@ -42,8 +42,8 @@ const Navbar = () => {
   return (
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? 'glass-effect shadow-lg py-3'
-          : 'bg-white/80 backdrop-blur-sm py-4'
+        ? 'glass-effect shadow-lg py-3'
+        : 'bg-white/80 backdrop-blur-sm py-4'
         }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -54,11 +54,15 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/posts" className="flex items-center gap-2 group">
             <motion.div
-              className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center"
+              className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center shadow-md"
               whileHover={{ scale: 1.05, rotate: 5 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="text-white font-bold text-xl">FT</span>
+              <img
+                src="/logo.png"
+                alt="FindTeam Logo"
+                className="w-full h-full object-cover"
+              />
             </motion.div>
             <span className="text-xl font-bold gradient-text hidden sm:block">
               FindTeam
@@ -120,8 +124,8 @@ const Navbar = () => {
                       key={link.path}
                       to={link.path}
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive(link.path)
-                          ? 'bg-blue-50 text-blue-600 font-semibold'
-                          : 'text-slate-700 hover:bg-slate-50'
+                        ? 'bg-blue-50 text-blue-600 font-semibold'
+                        : 'text-slate-700 hover:bg-slate-50'
                         }`}
                     >
                       <Icon size={20} />

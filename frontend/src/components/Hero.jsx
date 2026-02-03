@@ -37,13 +37,22 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Modern Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50" />
+      {/* Soccer Field Background */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: 'url(/soccer-field-night.jpg)',
+          backgroundPosition: 'center center',
+        }}
+      />
+
+      {/* Dark Overlay for Text Readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-emerald-900/50" />
 
       {/* Animated Background Shapes */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute top-20 -left-20 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl"
+          className="absolute top-20 -left-20 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl"
           animate={{
             x: [0, 50, 0],
             y: [0, 30, 0],
@@ -55,7 +64,7 @@ const Hero = () => {
           }}
         />
         <motion.div
-          className="absolute bottom-20 -right-20 w-96 h-96 bg-indigo-400/10 rounded-full blur-3xl"
+          className="absolute bottom-20 -right-20 w-96 h-96 bg-green-400/10 rounded-full blur-3xl"
           animate={{
             x: [0, -50, 0],
             y: [0, -30, 0],
@@ -97,10 +106,10 @@ const Hero = () => {
           {/* Main Headline */}
           <motion.h1
             variants={itemVariants}
-            className="text-5xl sm:text-6xl lg:text-7xl font-black text-slate-900 mb-6 leading-tight"
+            className="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight drop-shadow-lg"
           >
             Halı Saha{' '}
-            <span className="gradient-text">
+            <span className="text-emerald-400">
               Takım Arkadaşı
             </span>{' '}
             Bul
@@ -109,10 +118,10 @@ const Hero = () => {
           {/* Subtitle */}
           <motion.p
             variants={itemVariants}
-            className="text-xl sm:text-2xl text-slate-600 mb-12 max-w-3xl mx-auto leading-relaxed font-medium"
+            className="text-xl sm:text-2xl text-white mb-12 max-w-3xl mx-auto leading-relaxed font-medium drop-shadow-md"
           >
             Türkiye'nin en güvenilir halı saha platformunda{' '}
-            <span className="text-blue-600 font-semibold">saniyeler içinde</span>{' '}
+            <span className="text-emerald-300 font-semibold">saniyeler içinde</span>{' '}
             takım arkadaşları bul!
           </motion.p>
 
@@ -152,7 +161,7 @@ const Hero = () => {
                   className="glass-effect rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
                   whileHover={{ y: -5 }}
                 >
-                  <Icon className="w-8 h-8 text-blue-600 mx-auto mb-3" />
+                  <Icon className="w-8 h-8 text-emerald-500 mx-auto mb-3" />
                   <div className="text-3xl font-bold text-slate-900 mb-1">{stat.value}</div>
                   <div className="text-sm text-slate-600 font-medium">{stat.label}</div>
                 </motion.div>

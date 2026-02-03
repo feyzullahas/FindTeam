@@ -22,28 +22,46 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Sadece giriş yapmış kullanıcılar navbar görsün */}
-      {user && <Navbar />}
-
-      <main className={user ? "pt-20" : ""}>
-        <Routes>
-
-          <Route path="/" element={user ? <Navigate to="/posts" /> : <Home />} />
-          <Route path="/auth-success" element={<AuthSuccess />} />
-          <Route path="/debug" element={<Debug />} />
-          <Route
-            path="/profile"
-            element={user ? <Profile /> : <Navigate to="/" />}
+    <div className="min-h-screen relative">
+      {/* Soccer Field Background for authenticated users */}
+      {user && (
+        <>
+          <div
+            className="fixed inset-0 bg-cover bg-center z-0"
+            style={{
+              backgroundImage: 'url(/soccer-field-night.jpg)',
+              backgroundPosition: 'center center',
+              backgroundAttachment: 'fixed',
+            }}
           />
-          <Route
-            path="/create-post"
-            element={user ? <CreatePost /> : <Navigate to="/" />}
-          />
-          <Route path="/posts" element={user ? <Posts /> : <Navigate to="/" />} />
-          <Route path="/my-posts" element={user ? <MyPosts /> : <Navigate to="/" />} />
-        </Routes>
-      </main>
+          <div className="fixed inset-0 bg-black/40 z-0" />
+        </>
+      )}
+
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Sadece giriş yapmış kullanıcılar navbar görsün */}
+        {user && <Navbar />}
+
+        <main className={user ? "pt-20" : ""}>
+          <Routes>
+
+            <Route path="/" element={user ? <Navigate to="/posts" /> : <Home />} />
+            <Route path="/auth-success" element={<AuthSuccess />} />
+            <Route path="/debug" element={<Debug />} />
+            <Route
+              path="/profile"
+              element={user ? <Profile /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/create-post"
+              element={user ? <CreatePost /> : <Navigate to="/" />}
+            />
+            <Route path="/posts" element={user ? <Posts /> : <Navigate to="/" />} />
+            <Route path="/my-posts" element={user ? <MyPosts /> : <Navigate to="/" />} />
+          </Routes>
+        </main>
+      </div>
     </div>
   )
 }

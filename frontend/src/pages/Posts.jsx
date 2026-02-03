@@ -124,7 +124,7 @@ const Posts = () => {
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-xl font-bold text-slate-900">{post.title}</h3>
                 <span className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${post.post_type === 'team'
-                  ? 'bg-blue-100 text-blue-700'
+                  ? 'bg-emerald-100 text-emerald-700'
                   : 'bg-green-100 text-green-700'
                   }`}>
                   {post.post_type === 'team' ? 'Takım Arıyor' : 'Oyuncu Arıyor'}
@@ -172,7 +172,7 @@ const Posts = () => {
                     <Calendar size={16} />
                     <span className="font-medium">Maç Saati:</span>
                   </div>
-                  <div className="px-3 py-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium">
+                  <div className="px-3 py-2 bg-emerald-50 text-emerald-700 rounded-md text-sm font-medium">
                     🕐 {post.match_time}
                   </div>
                 </div>

@@ -10,7 +10,7 @@ const Home = () => {
   // Eğer kullanıcı giriş yapmamışsa, sadece giriş ekranı göster
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-green-50 px-4">
         <motion.div
           className="max-w-md w-full space-y-8 text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -101,8 +101,8 @@ const Home = () => {
       <section className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto px-4">
         <div className="card-hover text-center p-8">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
             </div>
@@ -118,8 +118,8 @@ const Home = () => {
 
         <div className="card-hover text-center p-8">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
