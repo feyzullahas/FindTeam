@@ -6,6 +6,7 @@ import { Search, Filter, Phone, MapPin, Users, Calendar } from 'lucide-react';
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [filters, setFilters] = useState({
     city: '',
     post_type: '',
@@ -19,10 +20,12 @@ const Posts = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true);
+      setError('');
       const data = await postsAPI.getPosts(filters);
       setPosts(data.posts || []);
     } catch (error) {
       console.error('İlanlar yüklenirken hata:', error);
+      setError(error.message || 'İlanlar yüklenirken bir hata oluştu.');
     } finally {
       setLoading(false);
     }
@@ -105,9 +108,33 @@ const Posts = () => {
 
       {/* Posts List */}
       <div className="space-y-6">
+        {error && (
+          <div className="card bg-red-50 border-2 border-red-200">
+            <div className="flex items-start gap-3">
+              <div className="text-red-500 text-xl">⚠️</div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-red-800 mb-1">Hata</h3>
+                <p className="text-red-700 text-sm mb-3">{error}</p>
+                <button
+                  onClick={fetchPosts}
+                  className="btn btn-primary text-sm"
+                >
+                  Tekrar Dene
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {loading ? (
           <div className="text-center py-8">
-            <div className="text-xl">Yükleniyor...</div>
+            <div className="inline-flex items-center gap-3">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+              <div className="text-xl text-white drop-shadow">Yükleniyor...</div>
+            </div>
+            <p className="text-sm text-white/70 mt-2">
+              İlk yüklemede backend uyandırılıyor olabilir, lütfen bekleyin...
+            </p>
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center py-8">

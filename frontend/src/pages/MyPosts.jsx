@@ -58,9 +58,14 @@ const MyPosts = () => {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto pt-8 px-4">
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
-          <span className="ml-3 text-white drop-shadow">İlanlarınız yükleniyor...</span>
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="inline-flex items-center gap-3 mb-3">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+            <span className="text-xl text-white drop-shadow">İlanlarınız yükleniyor...</span>
+          </div>
+          <p className="text-sm text-white/70">
+            İlk yüklemede backend uyandırılıyor olabilir, lütfen bekleyin...
+          </p>
         </div>
       </div>
     );
@@ -76,8 +81,20 @@ const MyPosts = () => {
       </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-6">
-          {error}
+        <div className="card bg-red-50 border-2 border-red-200">
+          <div className="flex items-start gap-3">
+            <div className="text-red-500 text-xl">⚠️</div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-red-800 mb-1">Hata</h3>
+              <p className="text-red-700 text-sm mb-3">{error}</p>
+              <button
+                onClick={fetchMyPosts}
+                className="btn btn-primary text-sm"
+              >
+                Tekrar Dene
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

@@ -2,11 +2,25 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://findteam.onrender.com";
 
-// Axios interceptor for better error handling
-axios.interceptors.response.use(
+// Create axios instance with timeout
+const axiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 30000, // 30 seconds
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// Response interceptor for error handling
+axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error('API Error:', error.response?.data || error.message);
+
+    // Handle timeout
+    if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+      return Promise.reject(new Error('Sunucu yanıt vermiyor. Backend uyandırılıyor olabilir, lütfen 30 saniye bekleyip tekrar deneyin.'));
+    }
 
     // Handle specific error cases
     if (error.response?.status === 401) {
@@ -26,6 +40,11 @@ axios.interceptors.response.use(
       return Promise.reject(new Error('Sunucu hatası. Lütfen daha sonra tekrar deneyin.'));
     }
 
+    // Network error
+    if (!error.response) {
+      return Promise.reject(new Error('Bağlantı hatası. İnternet bağlantınızı kontrol edin.'));
+    }
+
     return Promise.reject(error);
   }
 );
@@ -39,10 +58,9 @@ export const usersAPI = {
         throw new Error('Oturum açmanız gerekiyor.');
       }
 
-      const response = await axios.get(`${API_BASE_URL}/users/profile`, {
+      const response = await axiosInstance.get('/users/profile', {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${token}`
         }
       });
       return response.data;
@@ -60,10 +78,9 @@ export const usersAPI = {
         throw new Error('Oturum açmanız gerekiyor.');
       }
 
-      const response = await axios.put(`${API_BASE_URL}/users/profile`, profileData, {
+      const response = await axiosInstance.put('/users/profile', profileData, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${token}`
         }
       });
       return response.data;
@@ -80,7 +97,7 @@ export const usersAPI = {
       if (filters.city) params.append('city', filters.city);
       if (filters.position) params.append('position', filters.position);
 
-      const response = await axios.get(`${API_BASE_URL}/users/search?${params}`);
+      const response = await axiosInstance.get(`/users/search?${params}`);
       return response.data;
     } catch (error) {
       console.error('Search users error:', error);
