@@ -1,23 +1,69 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from app.auth.auth_routes import router as auth_router
 from app.users.user_routes import router as user_router
 from app.posts.post_routes import router as post_router
+from app.core.config import settings
+import os
 
-app = FastAPI(title="FindTeam API")
+# Disable Swagger docs in production for security
+# Access via /docs will return 404 in production
+if settings.ENVIRONMENT == "production":
+    app = FastAPI(
+        title="FindTeam API",
+        docs_url=None,  # Disable /docs
+        redoc_url=None,  # Disable /redoc
+        openapi_url=None  # Disable /openapi.json
+    )
+else:
+    app = FastAPI(title="FindTeam API")
 
-# CORS middleware
+# Restrict CORS to specific frontend domain only
+# CRITICAL SECURITY: Never use allow_origins=["*"] in production
+allowed_origins = [
+    settings.FRONTEND_URL,  # Production frontend
+    "https://findteam-ten.vercel.app",  # Explicit production URL
+    "http://localhost:3000",  # Local development
+    "http://localhost:5173",  # Vite dev server
+]
+
+# Only allow all origins in development
+if settings.ENVIRONMENT == "development":
+    allowed_origins.append("*")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Allow all origins for simplicity in deployment (or configure specific domains)
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["*"],
+    allow_headers=["Authorization", "Content-Type"],
+    max_age=600,  # Cache preflight requests for 10 minutes
+)
+
+# Add trusted host middleware to prevent host header attacks
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=[
+        "findteam.onrender.com",
+        "localhost",
+        "127.0.0.1",
+        "*.vercel.app"
+    ]
 )
 
 # Trust proxy headers (Critical for Render/Heroku HTTPS)
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=["*"])
+
+# Add security middleware
+from app.middleware.security import RateLimitMiddleware, SecurityHeadersMiddleware
+
+# Rate limiting: 100 requests per minute per IP
+app.add_middleware(RateLimitMiddleware, requests_per_minute=100)
+
+# Security headers
+app.add_middleware(SecurityHeadersMiddleware)
 
 # Include routers
 app.include_router(auth_router, tags=["auth"])

@@ -48,8 +48,25 @@ def validate_settings():
         raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
     
     # Production'da zayıf secret key kontrolü
-    if settings.ENVIRONMENT == "production" and settings.SECRET_KEY == "your-super-secret-key-here-change-this-in-production":
-        raise ValueError("Please change SECRET_KEY in production environment")
+    weak_keys = [
+        "your-super-secret-key-here-change-this-in-production",
+        "secret",
+        "test",
+        "development",
+        "changeme",
+        "secret-key"
+    ]
+    
+    if settings.ENVIRONMENT == "production":
+        # Check for weak/default keys
+        if settings.SECRET_KEY.lower() in weak_keys:
+            raise ValueError("SECURITY ERROR: Please change SECRET_KEY to a strong random value in production")
+        
+        # Check minimum key length (should be at least 32 characters)
+        if len(settings.SECRET_KEY) < 32:
+            raise ValueError("SECURITY ERROR: SECRET_KEY must be at least 32 characters long in production")
+        
+        print("✅ Security validation passed: Strong SECRET_KEY detected")
 
 # Başlangıçta kontrol et
 validate_settings()

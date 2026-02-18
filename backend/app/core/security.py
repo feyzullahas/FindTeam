@@ -42,8 +42,45 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 def verify_token(token: str) -> Optional[dict]:
+    """Verify JWT token with enhanced security checks"""
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        # Decode and verify token signature
+        payload = jwt.decode(
+            token, 
+            settings.SECRET_KEY, 
+            algorithms=[settings.ALGORITHM],
+            options={
+                "verify_signature": True,
+                "verify_exp": True,  # Verify expiration
+                "require": ["exp", "sub"]  # Require these claims
+            }
+        )
+        
+        # Additional validation checks
+        if not payload.get("sub"):
+            return None
+            
+        # Verify token is not expired (double-check)
+        exp = payload.get("exp")
+        if exp and datetime.utcnow().timestamp() > exp:
+            return None
+        
+        # Optionally verify user_id exists if present
+        user_id = payload.get("user_id")
+        if user_id is not None and not isinstance(user_id, int):
+            return None
+            
         return payload
+        
+    except jwt.ExpiredSignatureError:
+        # Token has expired
+        return None
+    except jwt.JWTClaimsError:
+        # Invalid claims
+        return None
     except JWTError:
+        # Any other JWT error (invalid signature, etc.)
+        return None
+    except Exception:
+        # Catch any unexpected errors
         return None
