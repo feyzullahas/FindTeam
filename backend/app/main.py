@@ -5,6 +5,7 @@ from app.auth.auth_routes import router as auth_router
 from app.users.user_routes import router as user_router
 from app.posts.post_routes import router as post_router
 from app.core.config import settings
+from datetime import datetime
 import os
 
 # Disable Swagger docs in production for security
@@ -73,6 +74,20 @@ app.include_router(post_router, prefix="/posts", tags=["posts"])
 @app.get("/")
 def root():
     return {"status": "API çalışıyor"}
+
+@app.get("/health")
+def health_check():
+    """Health check endpoint for uptime monitoring"""
+    return {
+        "status": "healthy",
+        "service": "FindTeam API",
+        "timestamp": datetime.now().isoformat()
+    }
+
+@app.get("/ping")
+def ping():
+    """Simple ping endpoint to keep Render awake"""
+    return {"pong": True}
 
 if __name__ == "__main__":
     import uvicorn
