@@ -109,6 +109,26 @@ export const postsAPI = {
     }
   },
 
+  // Get post by ID
+  getPostById: async (postId) => {
+    try {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        throw new Error('Oturum açmanız gerekiyor.');
+      }
+
+      const response = await axiosInstance.get(`/posts/${postId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Get post by id error:', error);
+      throw error;
+    }
+  },
+
   // Update post
   updatePost: async (postId, postData) => {
     try {

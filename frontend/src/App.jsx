@@ -8,6 +8,7 @@ import Profile from './pages/Profile'
 import CreatePost from './pages/CreatePost'
 import Posts from './pages/Posts'
 import Debug from './pages/Debug'
+import LineupBuilder from './pages/LineupBuilder'
 import './App.css'
 
 function App() {
@@ -57,8 +58,13 @@ function App() {
               path="/create-post"
               element={user ? <CreatePost /> : <Navigate to="/" />}
             />
+            <Route
+              path="/edit-post/:postId"
+              element={user ? <CreatePost /> : <Navigate to="/" />}
+            />
             <Route path="/posts" element={user ? <Posts /> : <Navigate to="/" />} />
             <Route path="/my-posts" element={user ? <MyPosts /> : <Navigate to="/" />} />
+            <Route path="/kadro" element={user ? <LineupBuilder /> : <Navigate to="/" />} />
           </Routes>
         </main>
       </div>

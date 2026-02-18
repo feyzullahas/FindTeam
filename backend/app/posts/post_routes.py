@@ -160,6 +160,40 @@ async def get_my_posts(
     
     return result
 
+@router.get("/{post_id}", response_model=PostResponse)
+async def get_post_by_id(
+    post_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    db_post = db.query(Post).filter(Post.id == post_id).first()
+    
+    if not db_post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    
+    # Only the owner can view their own post details for editing
+    if db_post.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to access this post")
+    
+    positions_needed = json.loads(db_post.positions_needed) if db_post.positions_needed else []
+    
+    return PostResponse(
+        id=db_post.id,
+        title=db_post.title,
+        description=db_post.description,
+        post_type=db_post.post_type,
+        city=db_post.city,
+        positions_needed=positions_needed,
+        contact_info=db_post.contact_info,
+        match_time=db_post.match_time,
+        venue=db_post.venue,
+        user_id=db_post.user_id,
+        status=db_post.status,
+        views_count=db_post.views_count,
+        created_at=db_post.created_at,
+        user_name=current_user.name
+    )
+
 @router.put("/{post_id}", response_model=PostResponse)
 async def update_post(
     post_id: int,

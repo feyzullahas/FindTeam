@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'https://findteam.onrender.com';
 export const lineupAPI = {
   // Tüm kadroları getir
   getLineups: async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     const response = await axios.get(`${API_URL}/lineups/`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -15,7 +15,7 @@ export const lineupAPI = {
 
   // Belirli bir kadroyu getir
   getLineup: async (id) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     const response = await axios.get(`${API_URL}/lineups/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -24,7 +24,7 @@ export const lineupAPI = {
 
   // Yeni kadro oluştur
   createLineup: async (lineupData) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     const response = await axios.post(`${API_URL}/lineups/`, lineupData, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -33,7 +33,7 @@ export const lineupAPI = {
 
   // Kadro güncelle
   updateLineup: async (id, lineupData) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     const response = await axios.put(`${API_URL}/lineups/${id}`, lineupData, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -42,7 +42,7 @@ export const lineupAPI = {
 
   // Kadro sil
   deleteLineup: async (id) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     const response = await axios.delete(`${API_URL}/lineups/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     });

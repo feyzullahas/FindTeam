@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { postsAPI } from '../api/posts';
 import { formatDate, formatPhoneNumber } from '../utils/helpers';
 import { Trash2, Edit2, Calendar, MapPin, Users, Phone, Clock, Eye } from 'lucide-react';
 
 const MyPosts = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -204,6 +206,14 @@ const MyPosts = () => {
 
                 {/* Actions */}
                 <div className="flex flex-col gap-2 ml-4">
+                  <button
+                    onClick={() => navigate(`/edit-post/${post.id}`)}
+                    className="btn btn-secondary flex items-center gap-2 text-blue-600 hover:bg-blue-50"
+                    title="İlanı Düzenle"
+                  >
+                    <Edit2 size={16} />
+                    Düzenle
+                  </button>
                   <button
                     onClick={() => handleDeletePost(post.id)}
                     disabled={deleteLoading === post.id}

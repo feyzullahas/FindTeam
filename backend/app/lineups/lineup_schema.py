@@ -1,12 +1,17 @@
 from pydantic import BaseModel
-from typing import Optional, Dict
+from typing import Optional, List
 from datetime import datetime
+
+class Player(BaseModel):
+    name: str
+    x: float  # X koordinatı (0-100 arası yüzde)
+    y: float  # Y koordinatı (0-100 arası yüzde)
 
 class LineupBase(BaseModel):
     name: str
-    formation: str = "3-3-1"
-    home_team: Dict[str, str]  # {"gk": "Ali", "def1": "Mehmet", ...}
-    away_team: Optional[Dict[str, str]] = None
+    formation: str = "7v7"
+    home_team: List[Player]  # Maksimum 7 oyuncu
+    away_team: Optional[List[Player]] = None  # Karşı takım (opsiyonel)
     notes: Optional[str] = None
 
 class LineupCreate(LineupBase):
@@ -15,8 +20,8 @@ class LineupCreate(LineupBase):
 class LineupUpdate(BaseModel):
     name: Optional[str] = None
     formation: Optional[str] = None
-    home_team: Optional[Dict[str, str]] = None
-    away_team: Optional[Dict[str, str]] = None
+    home_team: Optional[List[Player]] = None
+    away_team: Optional[List[Player]] = None
     notes: Optional[str] = None
 
 class LineupResponse(LineupBase):

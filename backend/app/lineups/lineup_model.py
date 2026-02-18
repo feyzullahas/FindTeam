@@ -8,8 +8,8 @@ class Lineup(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False)  # Kadro adı (örn: "Cumartesi Maçı")
-    formation = Column(String(20), default="3-3-1")  # 3 defans, 3 forvet, 1 kaleci
-    home_team = Column(JSON, nullable=False)  # {"gk": "name", "def1": "name", ...}
+    formation = Column(String(20), default="7v7")  # 7 kişilik halı saha
+    home_team = Column(JSON, nullable=False)  # [{"name": "Ali", "x": 50, "y": 30}, ...]
     away_team = Column(JSON, nullable=True)  # Karşı takım (opsiyonel)
     notes = Column(Text, nullable=True)  # Notlar
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)

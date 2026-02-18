@@ -1,17 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { postsAPI } from '../api/posts';
 import { POSITIONS, CITIES, POST_TYPES } from '../utils/helpers';
-import { Plus, Send } from 'lucide-react';
+import { Plus, Send, Edit2 } from 'lucide-react';
 
 const CreatePost = () => {
   const navigate = useNavigate();
+  const { postId } = useParams();
   const [loading, setLoading] = useState(false);
+  const [loadingPost, setLoadingPost] = useState(false);
   const [message, setMessage] = useState('');
+  const isEditMode = !!postId;
 
-  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm();
   const postType = watch('post_type');
+
+  // Load post data if in edit mode
+  useEffect(() => {
+    if (isEditMode) {
+      loadPostData();
+    }
+  }, [postId]);
+
+  const loadPostData = async () => {
+    try {
+      setLoadingPost(true);
+      const post = await postsAPI.getPostById(postId);
+      
+      // Set form values
+      setValue('title', post.title);
+      setValue('description', post.description || '');
+      setValue('city', post.city);
+      setValue('post_type', post.post_type);
+      setValue('positions_needed', post.positions_needed || []);
+      setValue('match_time', post.match_time || '');
+      setValue('venue', post.venue || '');
+      setValue('contact_phone', post.contact_info?.phone || '');
+      setValue('contact_email', post.contact_info?.email || '');
+    } catch (error) {
+      console.error('❌ Load post error:', error);
+      setMessage(error.message || 'İlan yüklenirken hata oluştu.');
+    } finally {
+      setLoadingPost(false);
+    }
+  };
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -33,22 +66,43 @@ const CreatePost = () => {
         }
       };
 
-      console.log('📤 Sending post data:', postData);
+      console.log(`📤 ${isEditMode ? 'Updating' : 'Sending'} post data:`, postData);
 
-      await postsAPI.createPost(postData);
-      setMessage('İlan başarıyla oluşturuldu!');
-      setTimeout(() => navigate('/posts'), 2000);
+      if (isEditMode) {
+        await postsAPI.updatePost(postId, postData);
+        setMessage('İlan başarıyla güncellendi!');
+      } else {
+        await postsAPI.createPost(postData);
+        setMessage('İlan başarıyla oluşturuldu!');
+      }
+      
+      setTimeout(() => navigate('/my-posts'), 2000);
     } catch (error) {
-      console.error('❌ Create post error:', error);
-      setMessage(error.message || 'İlan oluşturulurken hata oluştu. Lütfen tekrar deneyin.');
+      console.error(`❌ ${isEditMode ? 'Update' : 'Create'} post error:`, error);
+      setMessage(error.message || `İlan ${isEditMode ? 'güncellenirken' : 'oluşturulurken'} hata oluştu. Lütfen tekrar deneyin.`);
     } finally {
       setLoading(false);
     }
   };
 
+  if (loadingPost) {
+    return (
+      <div className="max-w-2xl mx-auto pt-8 px-4">
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="inline-flex items-center gap-3 mb-3">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+            <span className="text-xl text-white drop-shadow">İlan yükleniyor...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto pt-8 px-4">
-      <h1 className="text-3xl font-bold mb-6 text-white drop-shadow-lg">Yeni İlan Ver</h1>
+      <h1 className="text-3xl font-bold mb-6 text-white drop-shadow-lg">
+        {isEditMode ? 'İlanı Düzenle' : 'Yeni İlan Ver'}
+      </h1>
 
       <div className="card">
         {message && (
@@ -159,8 +213,8 @@ const CreatePost = () => {
             disabled={loading}
             className="btn btn-primary w-full flex items-center justify-center gap-2"
           >
-            <Send size={16} />
-            {loading ? 'Gönderiliyor...' : 'İlanı Yayınla'}
+            {isEditMode ? <Edit2 size={16} /> : <Send size={16} />}
+            {loading ? (isEditMode ? 'Güncelleniyor...' : 'Gönderiliyor...') : (isEditMode ? 'İlanı Güncelle' : 'İlanı Yayınla')}
           </button>
         </form>
       </div>
