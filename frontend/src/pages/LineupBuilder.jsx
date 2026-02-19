@@ -24,11 +24,15 @@ const LineupBuilder = () => {
 
   const loadLineups = async () => {
     try {
+      console.log('📥 Kadrolar yükleniyor...');
       const data = await lineupAPI.getLineups();
+      console.log('✅ Alınan kadrolar:', data);
       setSavedLineups(data.lineups || []);
+      console.log(`📋 ${data.lineups?.length || 0} kadro bulundu`);
     } catch (err) {
-      console.error('Kadrolar yüklenemedi:', err);
-      setMessage('Kadrolar yüklenirken hata oluştu');
+      console.error('❌ Kadrolar yüklenemedi:', err);
+      console.error('Hata detayı:', err.response?.data);
+      setMessage('Kadrolar yüklenirken hata oluştu: ' + (err.response?.data?.detail || err.message));
     }
   };
 
@@ -114,18 +118,30 @@ const LineupBuilder = () => {
         notes: notes || null
       };
 
+      console.log('📤 Kadro kaydediliyor:', lineupData);
+
       if (selectedLineupId) {
-        await lineupAPI.updateLineup(selectedLineupId, lineupData);
-        setMessage('Kadro güncellendi!');
+        console.log(`🔄 Güncelleniyor: ID ${selectedLineupId}`);
+        const result = await lineupAPI.updateLineup(selectedLineupId, lineupData);
+        console.log('✅ Kadro güncellendi:', result);
+        setMessage('Kadro başarıyla güncellendi!');
       } else {
-        await lineupAPI.createLineup(lineupData);
-        setMessage('Kadro kaydedildi!');
+        console.log('➕ Yeni kadro oluşturuluyor...');
+        const result = await lineupAPI.createLineup(lineupData);
+        console.log('✅ Kadro kaydedildi:', result);
+        setMessage('Kadro başarıyla kaydedildi!');
+        setSelectedLineupId(result.id);
       }
 
+      console.log('🔄 Kadrolar yeniden yükleniyor...');
       await loadLineups();
+      console.log('✅ Kadrolar yüklendi');
     } catch (err) {
-      console.error('Kadro kaydedilemedi:', err);
-      setMessage('Kadro kaydedilemedi: ' + (err.response?.data?.detail || err.message));
+      console.error('❌ Kadro kaydedilemedi:', err);
+      console.error('Hata detayı:', err.response?.data);
+      const errorMsg = err.response?.data?.detail || err.message || 'Bilinmeyen hata';
+      setMessage('Kadro kaydedilemedi: ' + errorMsg);
+      alert('Hata: ' + errorMsg);
     } finally {
       setLoading(false);
     }

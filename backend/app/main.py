@@ -15,6 +15,11 @@ from app.database.db import engine
 from app.users.user_model import User
 from app.posts.post_model import Post
 from app.lineups.lineup_model import Lineup
+import logging
+
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Disable Swagger docs in production for security
 # Access via /docs will return 404 in production
@@ -33,10 +38,21 @@ else:
 async def startup_event():
     """Create all database tables when the application starts"""
     try:
+        logger.info("🚀 Starting application...")
+        logger.info("📊 Creating database tables...")
+        
+        # List all tables that will be created
+        tables = Base.metadata.tables.keys()
+        logger.info(f"📋 Tables to create/verify: {list(tables)}")
+        
         Base.metadata.create_all(bind=engine)
-        print("✅ Database tables created/verified successfully")
+        
+        logger.info("✅ Database tables created/verified successfully")
+        logger.info(f"✅ Tables: {', '.join(tables)}")
     except Exception as e:
-        print(f"⚠️  Warning: Could not create database tables: {e}")
+        logger.error(f"❌ Error creating database tables: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
 
 # Restrict CORS to specific frontend domain only
 # CRITICAL SECURITY: Never use allow_origins=["*"] in production
