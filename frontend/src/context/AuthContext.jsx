@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { authAPI } from "../api/auth";
 
 const AuthContext = createContext(null);
 
@@ -15,16 +16,34 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch {
-        localStorage.removeItem("user");
-        localStorage.removeItem("access_token");
+    const initializeAuth = async () => {
+      const savedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("access_token");
+      
+      if (savedUser && token) {
+        try {
+          // Token'ın hala geçerli olup olmadığını kontrol et
+          const isValid = await authAPI.verifyToken();
+          
+          if (isValid) {
+            // Token geçerli, kullanıcıyı ayarla
+            setUser(JSON.parse(savedUser));
+          } else {
+            // Token geçersiz, localStorage'ı temizle
+            localStorage.removeItem("user");
+            localStorage.removeItem("access_token");
+          }
+        } catch (error) {
+          // Hata durumunda localStorage'ı temizle
+          localStorage.removeItem("user");
+          localStorage.removeItem("access_token");
+        }
       }
-    }
-    setLoading(false);
+      
+      setLoading(false);
+    };
+
+    initializeAuth();
   }, []);
 
   const login = () => {

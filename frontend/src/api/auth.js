@@ -20,6 +20,25 @@ export const authAPI = {
     }
   },
 
+  // Verify token validity
+  verifyToken: async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) return false;
+
+      const response = await axios.get(`${API_BASE_URL}/users/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return !!response.data;
+    } catch (error) {
+      // Token is invalid or expired
+      return false;
+    }
+  },
+
   // Get current user
   getCurrentUser: async () => {
     try {
