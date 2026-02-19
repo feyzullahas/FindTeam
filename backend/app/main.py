@@ -4,6 +4,7 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from app.auth.auth_routes import router as auth_router
 from app.users.user_routes import router as user_router
 from app.posts.post_routes import router as post_router
+from app.lineups.lineup_routes import router as lineup_router
 from app.core.config import settings
 from datetime import datetime
 import os
@@ -70,6 +71,7 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.include_router(auth_router, tags=["auth"])
 app.include_router(user_router, prefix="/users", tags=["users"])
 app.include_router(post_router, prefix="/posts", tags=["posts"])
+app.include_router(lineup_router, prefix="/lineups", tags=["lineups"])
 
 @app.get("/")
 def root():
