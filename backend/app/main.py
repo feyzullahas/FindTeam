@@ -9,6 +9,13 @@ from app.core.config import settings
 from datetime import datetime
 import os
 
+# Database models
+from app.database.base import Base
+from app.database.db import engine
+from app.users.user_model import User
+from app.posts.post_model import Post
+from app.lineups.lineup_model import Lineup
+
 # Disable Swagger docs in production for security
 # Access via /docs will return 404 in production
 if settings.ENVIRONMENT == "production":
@@ -20,6 +27,16 @@ if settings.ENVIRONMENT == "production":
     )
 else:
     app = FastAPI(title="FindTeam API")
+
+# Create database tables on startup
+@app.on_event("startup")
+async def startup_event():
+    """Create all database tables when the application starts"""
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables created/verified successfully")
+    except Exception as e:
+        print(f"⚠️  Warning: Could not create database tables: {e}")
 
 # Restrict CORS to specific frontend domain only
 # CRITICAL SECURITY: Never use allow_origins=["*"] in production
