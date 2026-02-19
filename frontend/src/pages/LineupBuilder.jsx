@@ -19,8 +19,36 @@ const LineupBuilder = () => {
   const [draggedPlayer, setDraggedPlayer] = useState(null);
 
   useEffect(() => {
-    loadLineups();
+    loadLineupsAndRestore();
   }, []);
+
+  const loadLineupsAndRestore = async () => {
+    try {
+      console.log('📥 Kadrolar yükleniyor...');
+      const data = await lineupAPI.getLineups();
+      console.log('✅ Alınan kadrolar:', data);
+      setSavedLineups(data.lineups || []);
+      console.log(`📋 ${data.lineups?.length || 0} kadro bulundu`);
+
+      // Sayfa yenilendiğinde veya geri gelindiğinde son düzenlenen kadroyu geri yükle
+      const lastLineupId = localStorage.getItem('currentLineupId');
+      if (lastLineupId && data.lineups) {
+        const lastLineup = data.lineups.find(l => l.id === parseInt(lastLineupId));
+        if (lastLineup) {
+          console.log('🔄 Son kadro geri yükleniyor:', lastLineup.name);
+          setSelectedLineupId(lastLineup.id);
+          setLineupName(lastLineup.name);
+          setHomeTeam(lastLineup.home_team || []);
+          setAwayTeam(lastLineup.away_team || []);
+          setNotes(lastLineup.notes || '');
+        }
+      }
+    } catch (err) {
+      console.error('❌ Kadrolar yüklenemedi:', err);
+      console.error('Hata detayı:', err.response?.data);
+      setMessage('Kadrolar yüklenirken hata oluştu: ' + (err.response?.data?.detail || err.message));
+    }
+  };
 
   const loadLineups = async () => {
     try {
@@ -125,12 +153,16 @@ const LineupBuilder = () => {
         const result = await lineupAPI.updateLineup(selectedLineupId, lineupData);
         console.log('✅ Kadro güncellendi:', result);
         setMessage('Kadro başarıyla güncellendi!');
+        // localStorage'a kaydet ki sayfa değiştirildiğinde kalksın
+        localStorage.setItem('currentLineupId', selectedLineupId.toString());
       } else {
         console.log('➕ Yeni kadro oluşturuluyor...');
         const result = await lineupAPI.createLineup(lineupData);
         console.log('✅ Kadro kaydedildi:', result);
         setMessage('Kadro başarıyla kaydedildi!');
         setSelectedLineupId(result.id);
+        // localStorage'a kaydet ki sayfa değiştirildiğinde kalksın
+        localStorage.setItem('currentLineupId', result.id.toString());
       }
 
       console.log('🔄 Kadrolar yeniden yükleniyor...');
@@ -148,19 +180,25 @@ const LineupBuilder = () => {
   };
 
   const handleLoadLineup = (lineup) => {
+    console.log('📂 Kadro yükleniy¿or:', lineup.name);
     setSelectedLineupId(lineup.id);
     setLineupName(lineup.name);
     setHomeTeam(lineup.home_team || []);
     setAwayTeam(lineup.away_team || []);
     setNotes(lineup.notes || '');
+    // localStorage'a kaydet ki sayfa değiştirildiğinde kalksın
+    localStorage.setItem('currentLineupId', lineup.id.toString());
   };
 
   const handleNewLineup = () => {
+    console.log('➕ Yeni kadro oluşturuluyor (sıfırdan)');
     setSelectedLineupId(null);
     setLineupName('');
     setHomeTeam([]);
     setAwayTeam([]);
     setNotes('');
+    // localStorage'dan temizle çünkü yeni kadro
+    localStorage.removeItem('currentLineupId');
   };
 
   const handleDeleteLineup = async (id) => {
