@@ -45,19 +45,18 @@ async def create_lineup(
 ):
     """Yeni kadro dizilişi oluştur"""
     try:
-        logger.info(f"Creating lineup for user {current_user.id}: {lineup.name}")
-        logger.info(f"Lineup data: {lineup.dict()}")
+        logger.info(f"➕ Creating lineup for user {current_user.id}: {lineup.name}")
         
-        # Convert Pydantic models to dict for JSON storage
-        lineup_dict = lineup.dict()
-        home_team_list = [player.dict() for player in lineup.home_team]
-        away_team_list = [player.dict() for player in lineup.away_team] if lineup.away_team else None
+        # Convert Pydantic model to dict (Pydantic v2)
+        lineup_dict = lineup.model_dump()
+        logger.info(f"📤 Lineup data: name='{lineup_dict['name']}', home_team_count={len(lineup_dict.get('home_team', []))}")
         
+        # Veritabanı modeli oluştur
         db_lineup = Lineup(
             name=lineup_dict['name'],
             formation=lineup_dict['formation'],
-            home_team=home_team_list,
-            away_team=away_team_list,
+            home_team=lineup_dict['home_team'],
+            away_team=lineup_dict.get('away_team'),
             notes=lineup_dict.get('notes'),
             user_id=current_user.id
         )
@@ -69,7 +68,9 @@ async def create_lineup(
         logger.info(f"✅ Lineup created successfully with ID: {db_lineup.id}")
         return db_lineup
     except Exception as e:
+        import traceback
         logger.error(f"❌ Error creating lineup: {str(e)}")
+        logger.error(f"📋 Traceback:\n{traceback.format_exc()}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Kadro oluşturulurken hata: {str(e)}")
 
@@ -114,36 +115,53 @@ async def update_lineup(
 ):
     """Kadro dizilişini güncelle"""
     try:
-        logger.info(f"Updating lineup {lineup_id} for user {current_user.id}")
+        logger.info(f"🔄 Updating lineup {lineup_id} for user {current_user.id}")
         
+        # 1. Veritabanından mevcut kadroyu bul
         db_lineup = db.query(Lineup).filter(
             Lineup.id == lineup_id,
             Lineup.user_id == current_user.id
         ).first()
         
         if not db_lineup:
-            raise HTTPException(status_code=404, detail="Kadro bulunamadı")
+            logger.error(f"❌ Lineup {lineup_id} not found for user {current_user.id}")
+            raise HTTPException(status_code=404, detail="Kadro bulunamadı veya size ait değil")
         
-        update_data = lineup_update.dict(exclude_unset=True)
+        logger.info(f"📋 Found lineup: {db_lineup.name}")
         
-        # Convert Player models to dict if present
-        if 'home_team' in update_data and update_data['home_team']:
-            update_data['home_team'] = [player.dict() for player in update_data['home_team']]
-        if 'away_team' in update_data and update_data['away_team']:
-            update_data['away_team'] = [player.dict() for player in update_data['away_team']]
+        # 2. Pydantic modelini dict'e çevir - sadece gönderilen alanları al
+        update_data = lineup_update.model_dump(exclude_unset=True, exclude_none=True)
+        logger.info(f"📤 Update data received: {list(update_data.keys())}")
         
+        # 3. Her alanı güncelle
         for field, value in update_data.items():
-            setattr(db_lineup, field, value)
+            if hasattr(db_lineup, field):
+                logger.info(f"✏️ Updating {field} (type: {type(value).__name__})")
+                setattr(db_lineup, field, value)
+            else:
+                logger.warning(f"⚠️ Skipping unknown field: {field}")
         
-        db.commit()
+        # 4. Değişiklikleri kaydet
+        try:
+            db.commit()
+            logger.info("💾 Changes committed to database successfully")
+        except Exception as commit_error:
+            logger.error(f"❌ Commit error: {commit_error}")
+            db.rollback()
+            raise
+        
+        # 5. Güncellenmiş veriyi yeniden yükle
         db.refresh(db_lineup)
+        logger.info(f"✅ Lineup {lineup_id} updated successfully: {db_lineup.name}")
         
-        logger.info(f"✅ Lineup {lineup_id} updated successfully")
         return db_lineup
+        
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"❌ Error updating lineup: {str(e)}")
+        import traceback
+        logger.error(f"❌ Error updating lineup {lineup_id}: {str(e)}")
+        logger.error(f"📋 Traceback:\n{traceback.format_exc()}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Kadro güncellenirken hata: {str(e)}")
 
