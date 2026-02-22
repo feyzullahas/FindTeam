@@ -22,6 +22,10 @@ class Settings(BaseSettings):
     # Environment
     ENVIRONMENT: str = "development"
     DEBUG: bool = True
+
+    # Admin
+    ADMIN_EMAILS: str = ""           # comma-separated allowed admin emails
+    ADMIN_MASTER_PASSWORD: str = ""  # master password for admin login
     
     class Config:
         env_file = ".env"

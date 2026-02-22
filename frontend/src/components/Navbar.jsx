@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, User, LogOut, PlusCircle, FileText, Home, Users } from 'lucide-react';
+import { Menu, X, User, LogOut, PlusCircle, FileText, Home, Users, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
@@ -36,6 +36,7 @@ const Navbar = () => {
     { path: '/create-post', label: 'İlan Ver', icon: PlusCircle },
     { path: '/kadro', label: 'Kadro', icon: Users },
     { path: '/profile', label: 'Profil', icon: User },
+    ...(user?.is_admin ? [{ path: '/admin', label: 'Admin', icon: Shield }] : []),
   ];
 
   const isActive = (path) => location.pathname === path;

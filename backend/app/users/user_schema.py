@@ -23,6 +23,8 @@ class UserUpdate(BaseModel):
 class UserResponse(UserBase):
     id: int
     is_verified: bool
+    is_admin: bool = False
+    role: str = "user"
     created_at: datetime
     
     class Config:
@@ -37,6 +39,8 @@ class UserProfile(BaseModel):
     age: Optional[int] = None
     positions: Optional[List[str]] = None
     is_verified: bool
+    is_admin: bool = False
+    role: str = "user"
     created_at: datetime
     
     class Config:

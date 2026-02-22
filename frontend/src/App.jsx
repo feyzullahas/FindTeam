@@ -9,6 +9,8 @@ import CreatePost from './pages/CreatePost'
 import Posts from './pages/Posts'
 import Debug from './pages/Debug'
 import LineupBuilder from './pages/LineupBuilder'
+import AdminLogin from './pages/AdminLogin'
+import AdminDashboard from './pages/AdminDashboard'
 import './App.css'
 
 function App() {
@@ -65,6 +67,9 @@ function App() {
             <Route path="/posts" element={user ? <Posts /> : <Navigate to="/" />} />
             <Route path="/my-posts" element={user ? <MyPosts /> : <Navigate to="/" />} />
             <Route path="/kadro" element={user ? <LineupBuilder /> : <Navigate to="/" />} />
+            {/* Admin – separate auth, no normal user login required */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </main>
       </div>
