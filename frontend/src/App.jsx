@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
+import { useTheme } from './context/ThemeContext'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import MyPosts from './pages/MyPosts'
@@ -15,39 +16,28 @@ import './App.css'
 
 function App() {
   const { user, loading } = useAuth()
+  const { theme } = useTheme()
+
+  const darkBg = 'linear-gradient(135deg, #0f172a 0%, #134e4a 50%, #065f46 100%)'
+  const lightBg = 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #d1fae5 100%)'
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Yükleniyor...</div>
+      <div className="min-h-screen flex items-center justify-center" style={{background: theme === 'dark' ? darkBg : lightBg}}>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin" />
+          <span className={`text-sm font-medium ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>Yükleniyor...</span>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen relative">
-      {/* Soccer Field Background for authenticated users */}
-      {user && (
-        <>
-          <div
-            className="fixed inset-0 bg-cover bg-center z-0"
-            style={{
-              backgroundImage: 'url(/soccer-field-night.jpg)',
-              backgroundPosition: 'center center',
-              backgroundAttachment: 'fixed',
-            }}
-          />
-          <div className="fixed inset-0 bg-black/40 z-0" />
-        </>
-      )}
+    <div data-theme={theme} className="min-h-screen bg-fixed" style={{background: theme === 'dark' ? darkBg : lightBg}}>
+      {user && <Navbar />}
 
-      {/* Content */}
-      <div className="relative z-10">
-        {/* Sadece giriş yapmış kullanıcılar navbar görsün */}
-        {user && <Navbar />}
-
-        <main className={user ? "pt-20" : ""}>
-          <Routes>
+      <main className={user ? "pt-16" : ""}>
+        <Routes>
 
             <Route path="/" element={user ? <Navigate to="/posts" /> : <Home />} />
             <Route path="/auth-success" element={<AuthSuccess />} />
@@ -72,7 +62,6 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </main>
-      </div>
     </div>
   )
 }

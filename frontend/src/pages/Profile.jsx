@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/AuthContext';
 import { usersAPI } from '../api/users';
 import { POSITIONS, CITIES } from '../utils/helpers';
-import { Save, User, MapPin, Phone, Calendar, Edit2, X } from 'lucide-react';
+import { Save, User, MapPin, Phone, Calendar, Edit2, X, Users } from 'lucide-react';
 
 const Profile = () => {
   const { user, setUser } = useAuth();
@@ -61,56 +61,65 @@ const Profile = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto pt-8 px-4">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-white drop-shadow-lg">Profilim</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-white">Profilim</h1>
+          <p className="text-sm text-slate-400 mt-0.5">{user.email}</p>
+        </div>
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="btn btn-secondary flex items-center gap-1 text-sm px-2 py-1.5 w-auto"
+          className={`btn btn-sm ${isEditing ? 'btn-secondary' : 'btn-outline'} flex items-center gap-1.5`}
         >
           {isEditing ? <X size={14} /> : <Edit2 size={14} />}
           {isEditing ? 'İptal' : 'Düzenle'}
         </button>
       </div>
 
-      <div className="card mb-8">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="bg-blue-100 rounded-full p-3">
-            <User className="text-blue-600" size={24} />
+      {/* Info card */}
+      <div className="card mb-5">
+        <div className="flex items-center gap-4 mb-5">
+          <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+            <User className="text-emerald-600" size={22} />
           </div>
           <div>
-            <h2 className="text-xl font-semibold">{user.name || user.email}</h2>
-            <p className="text-gray-600">{user.email}</p>
+            <h2 className="text-lg font-semibold text-white">{user.name || user.email}</h2>
+            {user.name && <p className="text-sm text-slate-200">{user.email}</p>}
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className="flex items-center gap-2 text-gray-600">
-            <MapPin size={16} />
+        <div className="grid sm:grid-cols-2 gap-3">
+          <div className="flex items-center gap-2 text-sm text-white rounded-xl px-4 py-3" style={{background:'rgba(255,255,255,0.08)'}}>
+            <MapPin size={15} className="text-emerald-400 shrink-0" />
             <span>{user.city || 'Şehir belirtilmemiş'}</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <Phone size={16} />
+          <div className="flex items-center gap-2 text-sm text-white rounded-xl px-4 py-3" style={{background:'rgba(255,255,255,0.08)'}}>
+            <Phone size={15} className="text-emerald-400 shrink-0" />
             <span>{user.phone || 'Telefon belirtilmemiş'}</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <Calendar size={16} />
+          <div className="flex items-center gap-2 text-sm text-white rounded-xl px-4 py-3" style={{background:'rgba(255,255,255,0.08)'}}>
+            <Calendar size={15} className="text-emerald-400 shrink-0" />
             <span>{user.age ? `${user.age} yaşında` : 'Yaş belirtilmemiş'}</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <span>Pozisyonlar:</span>
-            <span>{user.positions?.join(', ') || 'Belirtilmemiş'}</span>
+          <div className="flex items-start gap-2 text-sm text-white rounded-xl px-4 py-3" style={{background:'rgba(255,255,255,0.08)'}}>
+            <Users size={15} className="text-emerald-400 shrink-0 mt-0.5" />
+            <span className="leading-snug">
+              {user.positions?.length ? user.positions.join(', ') : 'Pozisyon belirtilmemiş'}
+            </span>
           </div>
         </div>
       </div>
 
       {isEditing && (
         <div className="card">
-          <h2 className="text-xl font-semibold mb-6">Profil Bilgilerini Düzenle</h2>
+          <h2 className="text-base font-semibold text-white mb-5">Bilgileri Düzenle</h2>
 
           {message && (
-            <div className={`p-3 rounded-md mb-4 ${message.includes('başarıyla') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-              }`}>
+            <div className={`p-3 rounded-xl text-sm mb-4 ${
+              message.includes('başarıyla')
+                ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                : 'bg-red-500/15 text-red-300 border border-red-500/30'
+            }`}>
               {message}
             </div>
           )}
@@ -160,16 +169,17 @@ const Profile = () => {
 
             <div>
               <label className="form-label">Oynayabileceğiniz Pozisyonlar</label>
-              <div className="grid grid-cols-2 gap-3">
+                          <div className="grid grid-cols-2 gap-2">
                 {POSITIONS.map(position => (
-                  <label key={position} className="flex items-center gap-2">
+                  <label key={position}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-white/10 transition-colors">
                     <input
                       type="checkbox"
                       value={position}
                       {...register('positions')}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="w-4 h-4 rounded border-white/30 text-emerald-600 focus:ring-emerald-500"
                     />
-                    <span>{position}</span>
+                    <span className="text-white">{position}</span>
                   </label>
                 ))}
               </div>

@@ -49,182 +49,113 @@ const MyPosts = () => {
     }
   };
 
-  const getPostTypeLabel = (postType) => {
-    return postType === 'team' ? 'Takım Arıyorum' : 'Oyuncu Arıyorum';
-  };
+  const getPostTypeLabel = (postType) =>
+    postType === 'team' ? 'Takım Arıyor' : 'Oyuncu Arıyor';
 
-  const getPostTypeColor = (postType) => {
-    return postType === 'team' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800';
-  };
+  const getPostTypeColor = (postType) =>
+    postType === 'team' ? 'badge-primary' : 'badge-warning';
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto pt-8 px-4">
-        <div className="flex flex-col items-center justify-center py-12">
-          <div className="inline-flex items-center gap-3 mb-3">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
-            <span className="text-xl text-white drop-shadow">İlanlarınız yükleniyor...</span>
-          </div>
-          <p className="text-sm text-white/70">
-            İlk yüklemede backend uyandırılıyor olabilir, lütfen bekleyin...
-          </p>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        <div className="flex flex-col items-center justify-center py-20 gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin" />
+          <span className="text-sm text-slate-400">İlanlarınız yükleniyor…</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto pt-8 px-4">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-white drop-shadow-lg">İlanlarım</h1>
-        <div className="text-sm text-white/80 drop-shadow">
-          Toplam {posts.length} ilanınız bulunuyor
+        <div>
+          <h1 className="text-2xl font-bold text-white">İlanlarım</h1>
+          <p className="text-sm text-slate-400 mt-0.5">Toplam {posts.length} ilan</p>
         </div>
       </div>
 
       {error && (
-        <div className="card bg-red-50 border-2 border-red-200">
-          <div className="flex items-start gap-3">
-            <div className="text-red-500 text-xl">⚠️</div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-red-800 mb-1">Hata</h3>
-              <p className="text-red-700 text-sm mb-3">{error}</p>
-              <button
-                onClick={fetchMyPosts}
-                className="btn btn-primary text-sm"
-              >
-                Tekrar Dene
-              </button>
-            </div>
-          </div>
+        <div className="card mb-6" style={{background:'rgba(239,68,68,0.15)',borderColor:'rgba(239,68,68,0.3)'}}>
+          <p className="text-sm text-red-300 mb-3">{error}</p>
+          <button onClick={fetchMyPosts} className="btn btn-sm btn-danger">Tekrar Dene</button>
         </div>
       )}
 
       {posts.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <div className="text-gray-400 text-6xl mb-4">📝</div>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">Henüz ilanınız yok</h3>
-          <p className="text-gray-600 mb-6">Hemen yeni bir ilan yayınlayarak futbolcularla tanışın!</p>
-          <a
-            href="/create-post"
-            className="btn btn-primary"
-          >
-            Yeni İlan Ver
-          </a>
+        <div className="text-center py-20">
+          <p className="text-slate-400 text-sm mb-4">Henüz hiç ilan oluşturmadınız.</p>
+          <a href="/create-post" className="btn btn-primary btn-sm">Yeni İlan Ver</a>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {posts.map((post) => (
-            <div key={post.id} className="card hover:shadow-lg transition-shadow">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  {/* Header with title and badge */}
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold text-slate-900">{post.title}</h3>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${getPostTypeColor(post.post_type)}`}>
+            <div key={post.id} className="card">
+              <div className="flex items-start gap-3">
+                <div className="flex-1 min-w-0">
+                  {/* Title + badge */}
+                  <div className="flex items-start gap-2 mb-2">
+                    <h3 className="text-base font-semibold text-white leading-snug">{post.title}</h3>
+                    <span className={`badge shrink-0 ${getPostTypeColor(post.post_type)}`}>
                       {getPostTypeLabel(post.post_type)}
                     </span>
                   </div>
 
-                  {/* Description */}
                   {post.description && (
-                    <p className="text-gray-700 mb-4">{post.description}</p>
+                    <p className="text-sm text-white mb-3 line-clamp-2">{post.description}</p>
                   )}
 
-                  {/* Details Grid */}
-                  <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-4 text-sm">
-                    <div className="flex items-center gap-1.5 text-slate-600">
-                      <MapPin size={16} className="text-slate-400" />
-                      <span>{post.city}</span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 text-slate-600">
-                      <Calendar size={16} className="text-slate-400" />
-                      <span>{formatDate(post.created_at)}</span>
-                    </div>
-
-                    {post.contact_info?.phone ? (
-                      <a
-                        href={`tel:${post.contact_info.phone}`}
-                        className="flex items-center gap-1.5 text-green-600 hover:text-green-700 hover:underline transition-colors font-medium"
-                        title="Aramak için tıklayın"
-                      >
-                        <Phone size={16} />
-                        <span>{formatPhoneNumber(post.contact_info.phone)}</span>
-                      </a>
-                    ) : (
-                      <div className="flex items-center gap-1.5 text-gray-400">
-                        <Phone size={16} />
-                        <span>Telefon belirtilmemiş</span>
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-1.5">
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${post.status === 'active' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
-                        }`}>
-                        {post.status === 'active' ? 'Aktif' : post.status}
+                  {/* Meta */}
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-200 mb-3">
+                    <span className="flex items-center gap-1">
+                      <MapPin size={12} className="text-slate-400" />{post.city}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Calendar size={12} className="text-slate-400" />{formatDate(post.created_at)}
+                    </span>
+                    {post.match_time && (
+                      <span className="flex items-center gap-1 text-emerald-400 font-medium">
+                        <Clock size={12} />{post.match_time}
                       </span>
-                    </div>
+                    )}
+                    {post.contact_info?.phone && (
+                      <a href={`tel:${post.contact_info.phone}`}
+                        className="flex items-center gap-1 text-emerald-400 hover:underline font-medium">
+                        <Phone size={12} />{formatPhoneNumber(post.contact_info.phone)}
+                      </a>
+                    )}
+                    <span className={`badge ${
+                      post.status === 'active' ? 'badge-success' : 'badge-neutral'
+                    }`}>
+                      {post.status === 'active' ? 'Aktif' : post.status}
+                    </span>
                   </div>
 
-                  {/* Match time and venue */}
-                  {(post.match_time || post.venue) && (
-                    <div className="flex items-center gap-3 mb-4 flex-wrap">
-                      {post.match_time && (
-                        <div className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-md font-medium text-sm">
-                          🕐 {post.match_time}
-                        </div>
-                      )}
-                      {post.venue && (
-                        <div className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-md font-medium text-sm">
-                          📍 {post.venue}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Positions */}
-                  {post.positions_needed && post.positions_needed.length > 0 && (
-                    <div className="mb-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Users size={16} />
-                        <span className="font-medium text-gray-700">İstenen Pozisyonlar:</span>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {post.positions_needed.map((position, index) => (
-                          <span
-                            key={index}
-                            className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-sm"
-                          >
-                            {position}
-                          </span>
-                        ))}
-                      </div>
+                  {post.positions_needed?.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {post.positions_needed.map((pos, i) => (
+                        <span key={i} className="badge badge-neutral">{pos}</span>
+                      ))}
                     </div>
                   )}
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-col gap-2 ml-4">
+                <div className="flex flex-col gap-2 shrink-0">
                   <button
                     onClick={() => navigate(`/edit-post/${post.id}`)}
-                    className="btn btn-secondary flex items-center gap-2 text-blue-600 hover:bg-blue-50"
-                    title="İlanı Düzenle"
+                    className="btn btn-sm btn-outline flex items-center gap-1.5"
                   >
-                    <Edit2 size={16} />
-                    Düzenle
+                    <Edit2 size={13} />Düzenle
                   </button>
                   <button
                     onClick={() => handleDeletePost(post.id)}
                     disabled={deleteLoading === post.id}
-                    className="btn btn-secondary flex items-center gap-2 text-red-600 hover:bg-red-50"
-                    title="İlanı Sil"
+                    className="btn btn-sm btn-danger flex items-center gap-1.5"
                   >
-                    {deleteLoading === post.id ? (
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
-                    ) : (
-                      <Trash2 size={16} />
-                    )}
+                    {deleteLoading === post.id
+                      ? <div className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                      : <Trash2 size={13} />}
                     Sil
                   </button>
                 </div>
