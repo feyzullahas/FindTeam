@@ -22,11 +22,12 @@ class UserUpdate(BaseModel):
 
 class UserResponse(UserBase):
     id: int
-    is_verified: bool
+    is_verified: bool = False
+    is_active: bool = True
     is_admin: bool = False
     role: str = "user"
     created_at: datetime
-    
+
     class Config:
         from_attributes = True
 

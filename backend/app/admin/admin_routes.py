@@ -103,7 +103,28 @@ async def get_stats(admin: User = Depends(admin_required), db: Session = Depends
 async def get_all_users(admin: User = Depends(admin_required), db: Session = Depends(get_db)):
     logger.info(f"📋 Admin {admin.email} is fetching all users")
     users = db.query(User).order_by(User.created_at.desc()).all()
-    return users
+    result = []
+    for u in users:
+        try:
+            positions = u.positions if isinstance(u.positions, list) else []
+            result.append(UserResponse(
+                id=u.id,
+                email=u.email,
+                name=u.name or "",
+                phone=u.phone,
+                city=u.city,
+                age=u.age,
+                positions=positions,
+                is_verified=bool(u.is_verified),
+                is_active=bool(u.is_active),
+                is_admin=bool(u.is_admin),
+                role=u.role or "user",
+                created_at=u.created_at,
+            ))
+        except Exception as e:
+            logger.warning(f"Skipping user {u.id} due to serialization error: {e}")
+            continue
+    return result
 
 
 @router.delete("/users/{user_id}")
