@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\/$/, '');
 
 // Admin JWT'si localStorage'da 'admin_token' key'inde saklanır (normal kullanıcı token'ından ayrı)
 const getAdminToken = () => localStorage.getItem('admin_token');
@@ -6,6 +6,14 @@ const adminHeaders = () => ({
   'Content-Type': 'application/json',
   Authorization: `Bearer ${getAdminToken()}`,
 });
+
+// Render uyku hatasını yakala
+const handleFetchError = (err, fallback) => {
+  if (err instanceof TypeError && err.message === 'Failed to fetch') {
+    throw new Error('Sunucu yanıt vermiyor. Backend uyandırılıyor olabilir, lütfen 30 saniye bekleyip tekrar deneyin.');
+  }
+  throw err;
+};
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 
@@ -43,36 +51,46 @@ export const isAdminLoggedIn = () => !!getAdminToken();
 export const adminAPI = {
   // İstatistikler
   getStats: async () => {
-    const res = await fetch(`${API_URL}/admin/stats`, { headers: adminHeaders() });
-    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail || 'İstatistikler alınamadı'); }
-    return res.json();
+    try {
+      const res = await fetch(`${API_URL}/admin/stats`, { headers: adminHeaders() });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail || 'İstatistikler alınamadı'); }
+      return res.json();
+    } catch (err) { handleFetchError(err); }
   },
 
   // Tüm kullanıcıları getir
   getAllUsers: async () => {
-    const res = await fetch(`${API_URL}/admin/users`, { headers: adminHeaders() });
-    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail || 'Kullanıcılar alınamadı'); }
-    return res.json();
+    try {
+      const res = await fetch(`${API_URL}/admin/users`, { headers: adminHeaders() });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail || 'Kullanıcılar alınamadı'); }
+      return res.json();
+    } catch (err) { handleFetchError(err); }
   },
 
   // Kullanıcı sil
   deleteUser: async (userId) => {
-    const res = await fetch(`${API_URL}/admin/users/${userId}`, { method: 'DELETE', headers: adminHeaders() });
-    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail || 'Kullanıcı silinemedi'); }
-    return res.json();
+    try {
+      const res = await fetch(`${API_URL}/admin/users/${userId}`, { method: 'DELETE', headers: adminHeaders() });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail || 'Kullanıcı silinemedi'); }
+      return res.json();
+    } catch (err) { handleFetchError(err); }
   },
 
   // Tüm ilanları getir
   getAllPosts: async () => {
-    const res = await fetch(`${API_URL}/admin/posts`, { headers: adminHeaders() });
-    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail || 'İlanlar alınamadı'); }
-    return res.json();
+    try {
+      const res = await fetch(`${API_URL}/admin/posts`, { headers: adminHeaders() });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail || 'İlanlar alınamadı'); }
+      return res.json();
+    } catch (err) { handleFetchError(err); }
   },
 
   // İlan sil
   deletePost: async (postId) => {
-    const res = await fetch(`${API_URL}/admin/posts/${postId}`, { method: 'DELETE', headers: adminHeaders() });
-    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail || 'İlan silinemedi'); }
-    return res.json();
+    try {
+      const res = await fetch(`${API_URL}/admin/posts/${postId}`, { method: 'DELETE', headers: adminHeaders() });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.detail || 'İlan silinemedi'); }
+      return res.json();
+    } catch (err) { handleFetchError(err); }
   },
 };

@@ -56,24 +56,23 @@ async def startup_event():
         logger.error(traceback.format_exc())
 
 # Restrict CORS to specific frontend domain only
-# CRITICAL SECURITY: Never use allow_origins=["*"] in production
 allowed_origins = [
     settings.FRONTEND_URL,  # Production frontend
     "https://findteam-ten.vercel.app",  # Explicit production URL
     "http://localhost:3000",  # Local development
     "http://localhost:5173",  # Vite dev server
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
 ]
-
-# Only allow all origins in development
-if settings.ENVIRONMENT == "development":
-    allowed_origins.append("*")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    # Tüm vercel.app preview URL'lerini ve localhost'u kapsayan regex
+    allow_origin_regex=r"https://.*\.vercel\.app|http://localhost:\d+|http://127\.0\.0\.1:\d+",
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_headers=["Authorization", "Content-Type", "Accept"],
     max_age=600,  # Cache preflight requests for 10 minutes
 )
 
