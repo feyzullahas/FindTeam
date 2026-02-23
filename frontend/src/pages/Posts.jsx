@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { postsAPI } from '../api/posts';
 import { POST_TYPES, CITIES, POSITIONS, formatDate, formatPhoneNumber } from '../utils/helpers';
-import { Filter, Phone, MapPin, Users, Calendar, Clock, RefreshCw } from 'lucide-react';
+import { Filter, Phone, MapPin, Users, Calendar, Clock, RefreshCw, ExternalLink } from 'lucide-react';
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -152,6 +152,16 @@ const Posts = () => {
                   <span className="flex items-center gap-1 text-sky-400 font-medium">
                     <MapPin size={13} />{post.venue}
                   </span>
+                )}
+                {post.location_link && (
+                  <a
+                    href={post.location_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-rose-400 hover:text-rose-300 font-medium transition-colors"
+                  >
+                    <ExternalLink size={13} />Konumu Gör
+                  </a>
                 )}
               </div>
 

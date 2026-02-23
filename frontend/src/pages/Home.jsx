@@ -63,7 +63,7 @@ const Home = () => {
   // Eğer kullanıcı giriş yapmamışsa, giriş/kayıt ekranı göster
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4" style={{background:'linear-gradient(135deg, #0f172a 0%, #134e4a 50%, #065f46 100%)'}}>
+      <div className="min-h-screen flex items-center justify-center px-4" style={{background:'#ffffff'}}>
         <motion.div
           className="max-w-sm w-full space-y-5"
           initial={{ opacity: 0, y: 20 }}
@@ -72,15 +72,15 @@ const Home = () => {
         >
           <div className="text-center">
             <motion.h1
-              className="text-2xl md:text-3xl font-bold text-white mb-2"
+              className="text-2xl md:text-3xl font-bold text-slate-800 mb-2"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              Halı Saha <span className="text-emerald-400">Takım Arkadaşı</span> Bul
+              Halı Saha <span className="text-emerald-600">Takım Arkadaşı</span> Bul
             </motion.h1>
             <motion.p
-              className="text-sm text-slate-300 mb-5"
+              className="text-sm text-slate-500 mb-5"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -95,7 +95,7 @@ const Home = () => {
               onClick={() => { setActiveTab('login'); setError(''); }}
               className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'login'
                 ? 'bg-emerald-600 text-white shadow-md'
-                : 'bg-white/10 text-slate-300 hover:bg-white/20'
+                : 'bg-white text-slate-500 hover:bg-emerald-50 border border-slate-200'
                 }`}
             >
               Giriş Yap
@@ -104,7 +104,7 @@ const Home = () => {
               onClick={() => { setActiveTab('register'); setError(''); }}
               className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'register'
                 ? 'bg-emerald-600 text-white shadow-md'
-                : 'bg-white/10 text-slate-300 hover:bg-white/20'
+                : 'bg-white text-slate-500 hover:bg-emerald-50 border border-slate-200'
                 }`}
             >
               Kayıt Ol
@@ -122,12 +122,12 @@ const Home = () => {
           {activeTab === 'login' && (
             <motion.form
               onSubmit={handleLogin}
-              className="space-y-3 bg-white/10 backdrop-blur-sm border border-white/20 p-5 rounded-2xl"
+              className="space-y-3 bg-white backdrop-blur-sm border border-emerald-100 p-5 rounded-2xl shadow-md shadow-emerald-50"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
             >
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                   Email
                 </label>
                 <input
@@ -135,13 +135,13 @@ const Home = () => {
                   required
                   value={loginData.email}
                   onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border border-white/20 rounded-lg bg-white/10 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none"
                   placeholder="ornek@email.com"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                   Şifre
                 </label>
                 <input
@@ -149,7 +149,7 @@ const Home = () => {
                   required
                   value={loginData.password}
                   onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border border-white/20 rounded-lg bg-white/10 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none"
                   placeholder="••••••••"
                 />
               </div>
@@ -164,17 +164,17 @@ const Home = () => {
 
               <div className="relative my-3">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/20"></div>
+                  <div className="w-full border-t border-slate-200"></div>
                 </div>
                 <div className="relative flex justify-center text-xs">
-                  <span className="px-2 bg-transparent text-slate-400">veya</span>
+                  <span className="px-2 bg-white text-slate-400">veya</span>
                 </div>
               </div>
 
               <button
                 type="button"
                 onClick={() => window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/auth/google/login`}
-                className="w-full flex items-center justify-center gap-2.5 bg-white text-slate-700 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors border border-white/30"
+                className="w-full flex items-center justify-center gap-2.5 bg-white text-slate-700 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors border border-slate-200"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path
@@ -203,12 +203,12 @@ const Home = () => {
           {activeTab === 'register' && (
             <motion.form
               onSubmit={handleRegister}
-              className="space-y-3 bg-white/10 backdrop-blur-sm border border-white/20 p-5 rounded-2xl"
+              className="space-y-3 bg-white backdrop-blur-sm border border-emerald-100 p-5 rounded-2xl shadow-md shadow-emerald-50"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
             >
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                   Ad Soyad
                 </label>
                 <input
@@ -216,13 +216,13 @@ const Home = () => {
                   required
                   value={registerData.name}
                   onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border border-white/20 rounded-lg bg-white/10 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none"
                   placeholder="Ahmet Yılmaz"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                   Email
                 </label>
                 <input
@@ -230,13 +230,13 @@ const Home = () => {
                   required
                   value={registerData.email}
                   onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border border-white/20 rounded-lg bg-white/10 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none"
                   placeholder="ornek@email.com"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                   Şifre
                 </label>
                 <input
@@ -245,13 +245,13 @@ const Home = () => {
                   minLength={6}
                   value={registerData.password}
                   onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border border-white/20 rounded-lg bg-white/10 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none"
                   placeholder="En az 6 karakter"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                   Şifre Tekrar
                 </label>
                 <input
@@ -260,7 +260,7 @@ const Home = () => {
                   minLength={6}
                   value={registerData.password_confirm}
                   onChange={(e) => setRegisterData({ ...registerData, password_confirm: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border border-white/20 rounded-lg bg-white/10 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none"
                   placeholder="Şifrenizi tekrar girin"
                 />
               </div>
@@ -283,8 +283,8 @@ const Home = () => {
           >
             {['Ücretsiz', 'Hızlı', 'Güvenli'].map((feature, index) => (
               <div key={index} className="flex flex-col items-center gap-1.5">
-                <CheckCircle className="w-4 h-4 text-emerald-400" />
-                <span className="text-xs text-slate-400 font-medium">{feature}</span>
+                <CheckCircle className="w-4 h-4 text-emerald-500" />
+                <span className="text-xs text-emerald-700 font-medium">{feature}</span>
               </div>
             ))}
           </motion.div>
@@ -298,10 +298,10 @@ const Home = () => {
     <div className="pt-24 space-y-12">
       {/* Hero Section */}
       <section className="text-center py-12 px-4">
-        <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
           Hoş Geldin, {user.name}! 👋
         </h1>
-        <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
+        <p className="text-xl text-slate-100 mb-8 max-w-2xl mx-auto">
           Halı sahta takım arkadaşı bulmak için doğru yerdesin!
         </p>
       </section>
@@ -310,14 +310,14 @@ const Home = () => {
       <section className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto px-4">
         <div className="card-hover text-center p-8">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
             </div>
           </div>
           <h3 className="text-2xl font-bold mb-3">İlan Ver</h3>
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-100 mb-6">
             Takım arkadaşları arıyorsun? Hemen ilan ver!
           </p>
           <Button variant="primary" onClick={() => window.location.href = '/create-post'}>
@@ -327,14 +327,14 @@ const Home = () => {
 
         <div className="card-hover text-center p-8">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
           </div>
           <h3 className="text-2xl font-bold mb-3">İlanları Keşfet</h3>
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-100 mb-6">
             Takım mı arıyorsun? İlanları incele!
           </p>
           <Button variant="outline" onClick={() => window.location.href = '/posts'}>

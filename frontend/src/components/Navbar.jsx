@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X, User, LogOut, PlusCircle, FileText, Home, Users, Shield, Sun, Moon } from 'lucide-react';
+import { Menu, X, User, LogOut, PlusCircle, FileText, Home, Users, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const isDark = theme === 'dark';
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -35,11 +31,7 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className={`fixed top-0 inset-x-0 z-50 backdrop-blur-md border-b transition-colors duration-300 ${
-      isDark
-        ? 'bg-slate-900/80 border-white/10'
-        : 'bg-white/90 border-emerald-200 shadow-sm'
-    }`}>
+    <nav className="fixed top-0 inset-x-0 z-50 backdrop-blur-md border-b transition-colors duration-300 bg-white/90 border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         {/* Logo */}
@@ -47,7 +39,7 @@ const Navbar = () => {
           <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-emerald-500/40">
             <img src="/logo.png" alt="FindTeam" className="w-full h-full object-cover" />
           </div>
-          <span className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-800'}`}>FindTeam</span>
+          <span className="text-lg font-bold tracking-tight text-slate-800">FindTeam</span>
         </Link>
 
         <div className="flex items-center gap-1">
@@ -65,10 +57,8 @@ const Navbar = () => {
                 to={path}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
                   isActive(path)
-                    ? 'bg-emerald-500/20 text-emerald-500'
-                    : isDark
-                      ? 'text-slate-300 hover:bg-white/10 hover:text-white'
-                      : 'text-slate-600 hover:bg-emerald-50 hover:text-emerald-700'
+                    ? 'bg-slate-200 text-slate-800'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 }`}
               >
                 <Icon size={16} strokeWidth={2} />
@@ -78,24 +68,13 @@ const Navbar = () => {
 
             <button
               onClick={handleLogout}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-150 ml-1 ${
-                isDark ? 'text-red-400 hover:bg-red-500/10 hover:text-red-300' : 'text-red-500 hover:bg-red-50 hover:text-red-600'
-              }`}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-150 ml-1 text-red-500 hover:bg-red-50 hover:text-red-600"
             >
               <LogOut size={16} strokeWidth={2} />
               Çıkış
             </button>
 
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              title={isDark ? 'Açık tema' : 'Koyu tema'}
-              className={`ml-1 p-2 rounded-lg transition-all duration-150 ${
-                isDark ? 'text-slate-300 hover:bg-white/10 hover:text-yellow-300' : 'text-slate-500 hover:bg-emerald-50 hover:text-emerald-700'
-              }`}
-            >
-              {isDark ? <Sun size={17} strokeWidth={2} /> : <Moon size={17} strokeWidth={2} />}
-            </button>
+            {/* Theme Toggle kaldırıldı */}
           </div>
 
           {/* Mobile: club logo + hamburger */}
@@ -104,9 +83,7 @@ const Navbar = () => {
           </div>
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 rounded-lg transition-colors ${
-              isDark ? 'text-slate-300 hover:bg-white/10 hover:text-white' : 'text-slate-600 hover:bg-emerald-50'
-            }`}
+            className={`md:hidden p-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100 hover:text-slate-900`}
             aria-label="Menüyü aç"
           >
             {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -122,9 +99,7 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className={`md:hidden backdrop-blur-md border-b px-4 pb-4 pt-2 space-y-1 ${
-              isDark ? 'bg-slate-900/95 border-white/10' : 'bg-white/95 border-emerald-100'
-            }`}
+            className="md:hidden backdrop-blur-md border-b px-4 pb-4 pt-2 space-y-1 bg-white/95 border-slate-200"
           >
             {navLinks.map(({ path, label, icon: Icon }) => (
               <Link
@@ -132,10 +107,8 @@ const Navbar = () => {
                 to={path}
                 className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                   isActive(path)
-                    ? 'bg-emerald-500/20 text-emerald-500'
-                    : isDark
-                      ? 'text-slate-300 hover:bg-white/10 hover:text-white'
-                      : 'text-slate-600 hover:bg-emerald-50 hover:text-emerald-700'
+                    ? 'bg-slate-200 text-slate-800'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 }`}
               >
                 <Icon size={18} />
@@ -144,22 +117,12 @@ const Navbar = () => {
             ))}
             <button
               onClick={handleLogout}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium w-full transition-colors ${
-                isDark ? 'text-red-400 hover:bg-red-500/10' : 'text-red-500 hover:bg-red-50'
-              }`}
+              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium w-full transition-colors text-red-500 hover:bg-red-50"
             >
               <LogOut size={18} />
               Çıkış Yap
             </button>
-            <button
-              onClick={toggleTheme}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium w-full transition-colors ${
-                isDark ? 'text-slate-300 hover:bg-white/10' : 'text-slate-600 hover:bg-emerald-50'
-              }`}
-            >
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
-              {isDark ? 'Açık Tema' : 'Koyu Tema'}
-            </button>
+            {/* Koyu tema kaldırıldı — toggle yok */}
           </motion.div>
         )}
       </AnimatePresence>

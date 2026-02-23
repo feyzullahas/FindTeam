@@ -18,8 +18,8 @@ function App() {
   const { user, loading } = useAuth()
   const { theme } = useTheme()
 
-  const darkBg = 'linear-gradient(135deg, #0f172a 0%, #134e4a 50%, #065f46 100%)'
-  const lightBg = 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #d1fae5 100%)'
+  const darkBg = '#ffffff'
+  const lightBg = '#ffffff'
 
   if (loading) {
     return (

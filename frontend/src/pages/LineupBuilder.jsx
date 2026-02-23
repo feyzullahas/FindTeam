@@ -413,7 +413,7 @@ const LineupBuilder = () => {
             </div>
 
             {/* Kaydet Butonu */}
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 flex flex-wrap gap-3">
               <button
                 onClick={handleSave}
                 disabled={loading}
@@ -425,7 +425,7 @@ const LineupBuilder = () => {
               {selectedLineupId && (
                 <button
                   onClick={handleNewLineup}
-                  className="btn btn-secondary flex items-center gap-2"
+                  className="btn btn-secondary flex items-center justify-center gap-2 flex-1"
                 >
                   <Plus size={18} />
                   Yeni Kadro

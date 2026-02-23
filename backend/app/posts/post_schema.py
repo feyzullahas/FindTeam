@@ -11,6 +11,7 @@ class PostBase(BaseModel):
     contact_info: Dict[str, str]  # {"phone": "...", "email": "..."}
     match_time: Optional[str] = None  # "18:00-20:00" formatında saat aralığı
     venue: Optional[str] = None  # Saha adı/yeri
+    location_link: Optional[str] = None  # Google Maps linki
 
 class PostCreate(PostBase):
     pass
@@ -23,6 +24,7 @@ class PostUpdate(BaseModel):
     contact_info: Optional[Dict[str, str]] = None
     match_time: Optional[str] = None
     venue: Optional[str] = None
+    location_link: Optional[str] = None
     status: Optional[str] = None
 
 class PostResponse(PostBase):

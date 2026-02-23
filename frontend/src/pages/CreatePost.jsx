@@ -36,6 +36,7 @@ const CreatePost = () => {
       setValue('positions_needed', post.positions_needed || []);
       setValue('match_time', post.match_time || '');
       setValue('venue', post.venue || '');
+      setValue('location_link', post.location_link || '');
       setValue('contact_phone', post.contact_info?.phone || '');
       setValue('contact_email', post.contact_info?.email || '');
     } catch (error) {
@@ -60,6 +61,7 @@ const CreatePost = () => {
         positions_needed: data.positions_needed || [],
         match_time: data.match_time || null,
         venue: data.venue || null,
+        location_link: data.location_link || null,
         contact_info: {
           phone: data.contact_phone,
           email: data.contact_email || ''
@@ -202,6 +204,17 @@ const CreatePost = () => {
               placeholder="Örn: Atatürk Spor Kompleksi, Merkez Halı Saha"
             />
             <p className="form-helper">Maçın oynanacağı saha/yer</p>
+          </div>
+
+          <div>
+            <label className="form-label">📍 Konum Linki <span className="text-slate-400 font-normal">(Opsiyonel)</span></label>
+            <input
+              type="url"
+              className="form-input"
+              {...register('location_link')}
+              placeholder="https://maps.google.com/..."
+            />
+            <p className="form-helper">Google Haritalar'dan kopyaladığınız konum linkini yapıştırın</p>
           </div>
 
           <div>
